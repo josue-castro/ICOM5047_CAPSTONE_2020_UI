@@ -1,0 +1,25 @@
+<h3>Cart List</h3>
+<div class="cart-list">
+  <ul>
+    <li *ngFor="let cart of carts" (click)="onCartSelect(cart)">
+      Cart #{{ cart.id }}
+    </li>
+  </ul>
+</div>
+
+<h3>Product List</h3>
+<div *ngIf="selectedCart" class="product-list">
+  <ul>
+    <li *ngFor="let product of products">
+      {{ product.lotId }} | {{ product.productName }}
+    </li>
+  </ul>
+</div>
+
+<!-- The component way to do it -->
+<!-- <app-cart-list></app-cart-list> -->
+
+<!-- <app-product-list
+  *ngIf="selectedCart"
+  [cartId]="selectedCart.id"
+></app-product-list> -->
