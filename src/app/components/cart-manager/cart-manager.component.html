@@ -1,5 +1,5 @@
 <h3>Cart List</h3>
-<div class="cart-list">
+<div id="cart-list">
   <ul>
     <li *ngFor="let cart of carts" (click)="onCartSelect(cart)">
       Cart #{{ cart.id }}
@@ -7,10 +7,10 @@
   </ul>
 </div>
 
-<h3>Product List</h3>
-<div *ngIf="selectedCart" class="product-list">
+<div *ngIf="selectedCart" id="product-list">
+  <input [(ngModel)]="searchText" placeholder="Product search" />
   <ul>
-    <li *ngFor="let product of products">
+    <li *ngFor="let product of products | productSearch: 'lotId':searchText">
       {{ product.lotId }} | {{ product.productName }}
     </li>
   </ul>

@@ -28,16 +28,6 @@ export class ProductService {
     );
   }
 
-  getProductsByCartId(cartId: number): Observable<Product[]> {
-    const url = `${this.productsUrl}?cartId=${cartId}`;
-    return this.http.get<Product[]>(url).pipe(
-      tap((_) => console.log(`fetched products w/cartId=${cartId}`)),
-      catchError(
-        this.handleError<Product[]>(`getProductsByCartId cartId=${cartId}`)
-      )
-    );
-  }
-
   getProductById(id: number): Observable<Product> {
     const url = `${this.productsUrl}/${id}`;
     return this.http.get<Product>(url).pipe(
@@ -46,8 +36,26 @@ export class ProductService {
     );
   }
 
+  getProductsByCartId(cartId: number): Observable<Product[]> {
+    const url = `${this.productsUrl}/?cartId=${cartId}`;
+    return this.http.get<Product[]>(url).pipe(
+      tap((_) => console.log(`fetched products w/cartId=${cartId}`)),
+      catchError(
+        this.handleError<Product[]>(`getProductsByCartId cartId=${cartId}`)
+      )
+    );
+  }
+
+  getProductByLotId(lotId: string): Observable<Product> {
+    const url = `${this.productsUrl}/?lotId=${lotId}`;
+    return this.http.get<Product>(url).pipe(
+      tap((_) => console.log(`fetched product 2/lotId=${lotId}`)),
+      catchError(this.handleError<Product>(`getProductsByLotId lotId=${lotId}`))
+    );
+  }
+
   getProductsByName(name: string): Observable<Product[]> {
-    const url = `${this.productsUrl}?productName=${name}`;
+    const url = `${this.productsUrl}/?productName=${name}`;
     return this.http.get<Product[]>(url).pipe(
       tap((_) => console.log(`fetched products w/name=${name}`)),
       catchError(
@@ -56,12 +64,28 @@ export class ProductService {
     );
   }
 
-  getProductByLotId(lotId: string): Observable<Product> {
-    const url = `${this.productsUrl}?lotId=${lotId}`;
-    return this.http.get<Product>(url).pipe(
-      tap((_) => console.log(`fetched product 2/lotId=${lotId}`)),
-      catchError(this.handleError<Product>(`getProductsByLotId lotId=${lotId}`))
+  customGet(cartId: number, productName: string): Observable<Product[]> {
+    const url = `${this.productsUrl}/?cartId=${cartId}&productName=${productName}`;
+    return this.http.get<Product[]>(url).pipe(
+      tap((_) =>
+        console.log(
+          `fetched product w/cartId=${cartId} & productName=${productName}`
+        )
+      ),
+      catchError(this.handleError<Product[]>(`custom search`, []))
     );
+  }
+
+  searchProducts(term: string): Observable<Product[]> {
+    if (!term.trim()) {
+      // if not search term, return empty hero array.
+      return of([]);
+    }
+
+    let url = `${this.productsUrl}/?productName=${term}`;
+    return this.http
+      .get<Product[]>(url)
+      .pipe(catchError(this.handleError<Product[]>('searchProducts', [])));
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

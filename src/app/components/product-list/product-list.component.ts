@@ -20,6 +20,9 @@ export class ProductListComponent implements OnInit, OnChanges {
   @Input() cartId: number;
 
   products: Product[];
+  selectedProduct: Product;
+  searchTerm;
+  searchParams: string[] = ['id', 'lotId'];
 
   constructor(private productService: ProductService) {}
 
