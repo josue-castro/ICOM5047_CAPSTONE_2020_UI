@@ -1,16 +1,15 @@
-import { Pipe, PipeTransform, Injectable } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { Product } from '../models/Product';
 
 @Pipe({
-  name: 'productSearch',
+  name: 'productPipe',
 })
 export class ProductSearchPipe implements PipeTransform {
   transform(products: Product[], key: string, term: string): Product[] {
-    if (!term) return products;
     if (!products) return [];
-
+    if (!term) return products;
     return products.filter((product) =>
-      product[key].toLowerCase().includes(term.toLowerCase())
+      product[key].toLowerCase().startsWith(term.toLowerCase())
     );
   }
 }

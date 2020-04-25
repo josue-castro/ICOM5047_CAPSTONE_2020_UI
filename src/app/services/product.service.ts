@@ -46,16 +46,16 @@ export class ProductService {
     );
   }
 
-  getProductByLotId(lotId: string): Observable<Product> {
-    const url = `${this.productsUrl}/?lotId=${lotId}`;
+  getProductByLotId(cartId: number, lotId: string): Observable<Product> {
+    const url = `${this.productsUrl}/?lotId=${lotId}&cartId=${cartId}`;
     return this.http.get<Product>(url).pipe(
-      tap((_) => console.log(`fetched product 2/lotId=${lotId}`)),
+      tap((_) => console.log(`fetched product w/lotId=${lotId}`)),
       catchError(this.handleError<Product>(`getProductsByLotId lotId=${lotId}`))
     );
   }
 
-  getProductsByName(name: string): Observable<Product[]> {
-    const url = `${this.productsUrl}/?productName=${name}`;
+  getProductsByName(cartId: number, name: string): Observable<Product[]> {
+    const url = `${this.productsUrl}/?productName=${name}&cartId=${cartId}`;
     return this.http.get<Product[]>(url).pipe(
       tap((_) => console.log(`fetched products w/name=${name}`)),
       catchError(
@@ -64,15 +64,17 @@ export class ProductService {
     );
   }
 
-  customGet(cartId: number, productName: string): Observable<Product[]> {
-    const url = `${this.productsUrl}/?cartId=${cartId}&productName=${productName}`;
+  productSearch(
+    cartId: number,
+    key: string,
+    term: string
+  ): Observable<Product[]> {
+    const url = `${this.productsUrl}/?cartId=${cartId}&${key}=${term}`;
     return this.http.get<Product[]>(url).pipe(
       tap((_) =>
-        console.log(
-          `fetched product w/cartId=${cartId} & productName=${productName}`
-        )
+        console.log(`fetched product w/cartId=${cartId} & ${key}=${term}`)
       ),
-      catchError(this.handleError<Product[]>(`custom search`, []))
+      catchError(this.handleError<Product[]>(`Product Search`, []))
     );
   }
 

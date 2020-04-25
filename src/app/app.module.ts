@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +15,8 @@ import { CartManagerComponent } from './components/cart-manager/cart-manager.com
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductSearchPipe } from './pipes/product-search.pipe';
 
+import { MaterialDesignModule } from './material-design/material-design.module';
+import { TestComponent } from './components/test/test.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +26,7 @@ import { ProductSearchPipe } from './pipes/product-search.pipe';
     CartManagerComponent,
     ProductListComponent,
     ProductSearchPipe,
+    TestComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,7 @@ import { ProductSearchPipe } from './pipes/product-search.pipe';
       dataEncapsulation: false,
     }),
     FormsModule,
-    NoopAnimationsModule,
+    MaterialDesignModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

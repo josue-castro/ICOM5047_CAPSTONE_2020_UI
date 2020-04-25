@@ -1,19 +1,97 @@
-<h3>Cart List</h3>
+<!-- Cart Component -->
 <div id="cart-list">
-  <ul>
-    <li *ngFor="let cart of carts" (click)="onCartSelect(cart)">
-      Cart #{{ cart.id }}
-    </li>
-  </ul>
+  <mat-toolbar color="primary">
+    Carts
+  </mat-toolbar>
+  <!-- Search parameters and filter fields -->
+  <div id="cart-search">
+    <button mat-stroked-button>
+      <mat-select #cartSearchParam>
+        <mat-option *ngFor="let key of cartSearchKey" [value]="key.value">
+          {{ key.viewValue }}
+        </mat-option>
+      </mat-select>
+    </button>
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        #cartSearch
+        [type]="cartSearchParam.value == 'expDate' ? 'date' : 'text'"
+        placeholder="Product Search"
+      />
+      <button
+        mat-stroked-button
+        matSuffix
+        method="GET"
+        (click)="searchCart(cartSearchParam.value, cartSearch.value)"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+      <button mat-stroked-button matSuffix>
+        <mat-icon>filter_list</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <mat-action-list>
+    <button mat-list-item *ngFor="let cart of carts" (click)="cartSelect(cart)">
+      <div mat-line>Cart #{{ cart.id }}</div>
+      <div mat-line>Last update: {{ cart.lastUpdate | date: "shortTime" }}</div>
+      <mat-icon
+        *ngIf="cart.nearExpDateWarnCount > 0"
+        [ngStyle]="{ color: 'orange' }"
+        >warning</mat-icon
+      >
+      <mat-icon *ngIf="cart.expWarnCount > 0" color="warn">warning</mat-icon>
+    </button>
+  </mat-action-list>
 </div>
 
-<div *ngIf="selectedCart" id="product-list">
-  <input [(ngModel)]="searchText" placeholder="Product search" />
-  <ul>
-    <li *ngFor="let product of products | productSearch: 'lotId':searchText">
-      {{ product.lotId }} | {{ product.productName }}
-    </li>
-  </ul>
+<mat-divider></mat-divider>
+
+<!-- Product Component -->
+<div id="product-list">
+  <mat-toolbar color="primary">
+    Products
+  </mat-toolbar>
+  <!-- Search parameters and filter fields -->
+  <div id="product-search">
+    <button mat-stroked-button>
+      <mat-select #searchKey>
+        <mat-option *ngFor="let key of productSearchKey" [value]="key.value">
+          {{ key.viewValue }}
+        </mat-option>
+      </mat-select>
+    </button>
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        #productSearch
+        [type]="searchKey.value == 'expDate' ? 'date' : 'text'"
+        placeholder="Product Search"
+      />
+      <button
+        mat-stroked-button
+        matSuffix
+        (click)="
+          searchProduct(selectedCart.id, searchKey.value, productSearch.value)
+        "
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+      <button mat-stroked-button matSuffix>
+        <mat-icon>filter_list</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <!-- Displaying product list -->
+  <mat-action-list>
+    <button mat-list-item *ngFor="let product of products">
+      <!-- | productPipe: searchKey.value:productSearch.value -->
+      <div mat-line>Lot ID: {{ product.lotId }}</div>
+      <div mat-line>Product Name: {{ product.productName }}</div>
+      <mat-icon *ngIf="isExpired(product)" color="warn">warning</mat-icon>
+    </button>
+  </mat-action-list>
 </div>
 
 <!-- The component way to do it -->

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as dateManager from 'src/app/helpers/expiration';
 
 // Models
 import { Cart } from '../../models/Cart';
@@ -7,9 +8,6 @@ import { Product } from '../../models/Product';
 // Services
 import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
-
-// Pipes
-import { ProductSearchPipe } from '../../pipes/product-search.pipe';
 
 @Component({
   selector: 'app-cart-manager',
@@ -20,11 +18,21 @@ export class CartManagerComponent implements OnInit {
   // Cart related variables
   selectedCart: Cart;
   carts: Cart[];
+  cartSearchKey = [
+    { value: 'cartId', viewValue: 'Cart ID' },
+    { value: 'lotId', viewValue: 'Lot ID' },
+    { value: 'productName', viewValue: 'Product Name' },
+    { value: 'expDate', viewValue: 'Expiration Date' },
+  ];
 
   // Product related variables
   selectedProduct: Product;
   products: Product[];
-  searchText;
+  productSearchKey = [
+    { value: 'lotId', viewValue: 'Lot ID' },
+    { value: 'productName', viewValue: 'Product Name' },
+    { value: 'expDate', viewValue: 'Expiration Date' },
+  ];
 
   constructor(
     private cartService: CartService,
@@ -37,7 +45,7 @@ export class CartManagerComponent implements OnInit {
     });
   }
 
-  onCartSelect(cart: Cart): void {
+  cartSelect(cart: Cart): void {
     // Issue: Repetitively fetching products even when selectedCart was equal to cart.
     // Resolved: Only fetch if the selected cart is different to the previous cart
     if (!this.selectedCart || this.selectedCart !== cart) {
@@ -50,20 +58,54 @@ export class CartManagerComponent implements OnInit {
     }
   }
 
+  searchCart(key: string, term: string) {
+    if (!term) {
+      this.cartService.getCarts().subscribe((carts) => {
+        this.carts = carts;
+      });
+    } else {
+      switch (key) {
+        case 'lotId':
+          this.cartService
+            .getCartContainingProductLotId(term)
+            .subscribe((carts) => {
+              this.carts = carts;
+            });
+          break;
+        case 'productName':
+          this.cartService
+            .getCartsContainingProductName(term)
+            .subscribe((carts) => {
+              this.carts = carts;
+            });
+          break;
+      }
+    }
+  }
+
+  searchProduct(cartId: number, key: string, term: string) {
+    if (!term) {
+      this.productService
+        .getProductsByCartId(this.selectedCart.id)
+        .subscribe((products) => {
+          this.products = products;
+        });
+    } else {
+      this.productService
+        .productSearch(cartId, key, term)
+        .subscribe((products) => {
+          this.products = products;
+        });
+    }
+  }
+
   isExpired(product: Product): boolean {
-    const productExpDate = new Date(product.expDate).getTime();
-    const currentDate = new Date().getTime();
-    return productExpDate < currentDate;
+    return dateManager.isExpired(product.expDate);
   }
 
   isNearExpiration(product: Product): boolean {
     // Product is considered near expiration when expiration date is within a week
     // returns false if product has already expired
-    const oneWeek = 24 * 3600 * 1000 * 7;
-    const productExpDate = new Date(product.expDate).getTime();
-    const currentDate = new Date().getTime();
-    const timeDifference = productExpDate - currentDate;
-
-    return timeDifference <= oneWeek && timeDifference > 0;
+    return dateManager.isNearExpiration(product.expDate, 7);
   }
 }
