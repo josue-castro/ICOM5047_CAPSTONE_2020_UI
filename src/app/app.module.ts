@@ -17,6 +17,8 @@ import { ProductSearchPipe } from './pipes/product-search.pipe';
 
 import { MaterialDesignModule } from './material-design/material-design.module';
 import { TestComponent } from './components/test/test.component';
+import { ProductItemComponent } from './components/product-item/product-item.component';
+import { CartItemComponent } from './components/cart-item/cart-item.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,6 +29,8 @@ import { TestComponent } from './components/test/test.component';
     ProductListComponent,
     ProductSearchPipe,
     TestComponent,
+    ProductItemComponent,
+    CartItemComponent,
   ],
   imports: [
     BrowserModule,

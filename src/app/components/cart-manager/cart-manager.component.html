@@ -38,10 +38,20 @@
       <div mat-line>Last update: {{ cart.lastUpdate | date: "shortTime" }}</div>
       <mat-icon
         *ngIf="cart.nearExpDateWarnCount > 0"
+        [matBadge]="cart.nearExpDateWarnCount"
+        matBadgeColor="accent"
+        matBadgeSize="small"
         [ngStyle]="{ color: 'orange' }"
         >warning</mat-icon
       >
-      <mat-icon *ngIf="cart.expWarnCount > 0" color="warn">warning</mat-icon>
+      <mat-icon
+        *ngIf="cart.expWarnCount > 0"
+        [matBadge]="cart.expWarnCount"
+        matBadgeColor="accent"
+        matBadgeSize="small"
+        color="warn"
+        >warning</mat-icon
+      >
     </button>
   </mat-action-list>
 </div>
@@ -93,11 +103,3 @@
     </button>
   </mat-action-list>
 </div>
-
-<!-- The component way to do it -->
-<!-- <app-cart-list></app-cart-list> -->
-
-<!-- <app-product-list
-  *ngIf="selectedCart"
-  [cartId]="selectedCart.id"
-></app-product-list> -->

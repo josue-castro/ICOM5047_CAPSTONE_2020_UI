@@ -1,3 +1,7 @@
-<ul>
-  <li *ngFor="let cart of carts">Cart #{{ cart.id }}</li>
-</ul>
+<mat-action-list>
+  <app-cart-item
+    mat-list-item
+    *ngFor="let cart of carts"
+    [cart]="cart"
+  ></app-cart-item>
+</mat-action-list>
