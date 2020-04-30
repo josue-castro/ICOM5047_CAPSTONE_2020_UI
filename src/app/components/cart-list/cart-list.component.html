@@ -1,7 +1,9 @@
-<mat-action-list>
-  <app-cart-item
-    mat-list-item
-    *ngFor="let cart of carts"
-    [cart]="cart"
-  ></app-cart-item>
-</mat-action-list>
+<div>
+  <mat-action-list>
+    <app-cart-item
+      *ngFor="let cart of carts"
+      [cart]="cart"
+      (cartSelected)="onCartSelect($event)"
+    ></app-cart-item>
+  </mat-action-list>
+</div>

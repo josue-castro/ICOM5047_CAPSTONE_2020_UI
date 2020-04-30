@@ -19,6 +19,7 @@ import { MaterialDesignModule } from './material-design/material-design.module';
 import { TestComponent } from './components/test/test.component';
 import { ProductItemComponent } from './components/product-item/product-item.component';
 import { CartItemComponent } from './components/cart-item/cart-item.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +32,7 @@ import { CartItemComponent } from './components/cart-item/cart-item.component';
     TestComponent,
     ProductItemComponent,
     CartItemComponent,
+    SearchBarComponent,
   ],
   imports: [
     BrowserModule,

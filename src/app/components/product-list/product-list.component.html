@@ -1,8 +1,9 @@
-<h3>Product List</h3>
-<div class="product-list">
-  <ul>
-    <li *ngFor="let product of products">
-      {{ product.lotId }} | {{ product.productName }}
-    </li>
-  </ul>
+<div>
+  <mat-action-list>
+    <app-product-item
+      mat-item-list
+      *ngFor="let product of products"
+      [product]="product"
+    ></app-product-item>
+  </mat-action-list>
 </div>

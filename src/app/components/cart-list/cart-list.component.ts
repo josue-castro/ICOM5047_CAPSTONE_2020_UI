@@ -8,8 +8,8 @@ import { CartService } from 'src/app/services/cart.service';
   styleUrls: ['./cart-list.component.css'],
 })
 export class CartListComponent implements OnInit {
-  selectedCart: Cart;
   carts: Cart[];
+  selectedCart: Cart;
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
@@ -18,7 +18,7 @@ export class CartListComponent implements OnInit {
     });
   }
 
-  cartSelect(cart: Cart): void {
+  onCartSelect(cart: Cart): void {
     // Issue: Repetitively fetching products even when selectedCart was equal to cart.
     // Resolved: Only fetch if the selected cart is different to the previous cart
     if (!this.selectedCart || this.selectedCart !== cart) {
