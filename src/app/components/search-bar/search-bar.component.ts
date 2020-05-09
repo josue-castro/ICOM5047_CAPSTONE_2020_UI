@@ -1,19 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
+interface SelectOption {
+  value: string;
+  viewValue: string;
+}
+
+interface SearchForm {
+  value: string;
+  searchBy: string;
+  filterBy: string;
+}
 
 @Component({
-  selector: 'app-search-bar',
+  selector: 'app-search-bar[searchOptions]',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.css'],
 })
 export class SearchBarComponent implements OnInit {
-  searchKey = [
-    { value: 'cartId', viewValue: 'Cart ID' },
-    { value: 'lotId', viewValue: 'Lot ID' },
-    { value: 'productName', viewValue: 'Product Name' },
-    { value: 'expDate', viewValue: 'Expiration Date' },
-  ];
+  // Search input label
+  @Input() label: string = 'Search';
+  // Disable input
+  @Input() disabled: boolean = false;
+  // Options to be passed to the Search by select group
+  @Input() searchOptions: SelectOption[];
+  // Options to be passed to the Filter by select group
+  @Input() filterOptions: SelectOption[];
+  @Output() search: EventEmitter<SearchForm> = new EventEmitter();
+
+  value = '';
+  searchBy;
+  filterBy;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.searchBy = this.searchOptions[0].value;
+  }
+
+  onSearch() {
+    this.search.emit();
+  }
 }

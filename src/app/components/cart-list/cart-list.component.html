@@ -1,9 +1,18 @@
-<div>
-  <mat-action-list>
-    <app-cart-item
-      *ngFor="let cart of carts"
-      [cart]="cart"
-      (cartSelected)="onCartSelect($event)"
-    ></app-cart-item>
-  </mat-action-list>
+<div class="list-container">
+  <div class="list-search-bar mat-elevation-z1">
+    <app-search-bar
+      [label]="'Cart Search'"
+      [searchOptions]="searchOptions"
+      (search)="search()"
+    ></app-search-bar>
+  </div>
+  <div class="list-content">
+    <mat-action-list dense>
+      <app-cart-item
+        *ngFor="let cart of carts"
+        [cart]="cart"
+        (cartSelect)="cartSelect($event)"
+      ></app-cart-item>
+    </mat-action-list>
+  </div>
 </div>

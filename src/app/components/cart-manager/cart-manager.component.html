@@ -38,20 +38,10 @@
       <div mat-line>Last update: {{ cart.lastUpdate | date: "shortTime" }}</div>
       <mat-icon
         *ngIf="cart.nearExpDateWarnCount > 0"
-        [matBadge]="cart.nearExpDateWarnCount"
-        matBadgeColor="accent"
-        matBadgeSize="small"
         [ngStyle]="{ color: 'orange' }"
         >warning</mat-icon
       >
-      <mat-icon
-        *ngIf="cart.expWarnCount > 0"
-        [matBadge]="cart.expWarnCount"
-        matBadgeColor="accent"
-        matBadgeSize="small"
-        color="warn"
-        >warning</mat-icon
-      >
+      <mat-icon *ngIf="cart.expWarnCount > 0" color="warn">warning</mat-icon>
     </button>
   </mat-action-list>
 </div>

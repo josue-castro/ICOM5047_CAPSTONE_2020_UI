@@ -1,3 +1,11 @@
-/* .search-bar {
-  
-} */
+.search-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+::ng-deep .mat-menu-panel {
+  padding: 0 10px !important;
+  width: 100% !important;
+  max-width: none !important;
+}

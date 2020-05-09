@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { Cart } from 'src/app/models/Cart';
 import { CartService } from 'src/app/services/cart.service';
 
@@ -9,7 +9,14 @@ import { CartService } from 'src/app/services/cart.service';
 })
 export class CartListComponent implements OnInit {
   carts: Cart[];
-  selectedCart: Cart;
+  searchOptions = [
+    { value: 'cartId', viewValue: 'Cart ID' },
+    { value: 'lotId', viewValue: 'Lot ID' },
+    { value: 'productName', viewValue: 'Product Name' },
+    { value: 'expDate', viewValue: 'Expiration Date' },
+  ];
+
+  @Output() selectedCart: Cart;
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
@@ -18,11 +25,15 @@ export class CartListComponent implements OnInit {
     });
   }
 
-  onCartSelect(cart: Cart): void {
+  cartSelect(cart: Cart): void {
     // Issue: Repetitively fetching products even when selectedCart was equal to cart.
     // Resolved: Only fetch if the selected cart is different to the previous cart
     if (!this.selectedCart || this.selectedCart !== cart) {
       this.selectedCart = cart;
     }
+  }
+
+  search() {
+    console.log('search');
   }
 }

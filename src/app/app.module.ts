@@ -14,6 +14,7 @@ import { CartListComponent } from './components/cart-list/cart-list.component';
 import { CartManagerComponent } from './components/cart-manager/cart-manager.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductSearchPipe } from './pipes/product-search.pipe';
+import { ViewValuePipe } from './pipes/view-value.pipe';
 
 import { MaterialDesignModule } from './material-design/material-design.module';
 import { TestComponent } from './components/test/test.component';
@@ -33,6 +34,7 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
     ProductItemComponent,
     CartItemComponent,
     SearchBarComponent,
+    ViewValuePipe,
   ],
   imports: [
     BrowserModule,

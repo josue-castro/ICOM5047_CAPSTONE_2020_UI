@@ -25,17 +25,22 @@ export class ProductListComponent implements OnInit, OnChanges {
 
   constructor(private productService: ProductService) {}
 
-  ngOnInit(): void {
-    this.productService.getProductsByCartId(2).subscribe((products) => {
-      this.products = products;
-    });
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.productService
-      .getProductsByCartId(changes.cartId.currentValue)
-      .subscribe((products) => {
-        this.products = products;
-      });
+    for (let propName in changes) {
+      let change = changes[propName];
+      switch (propName) {
+        case 'cart': {
+          if (change.currentValue) {
+            this.productService
+              .getProductsByCartId(change.currentValue.id)
+              .subscribe((products) => {
+                this.products = products;
+              });
+          }
+        }
+      }
+    }
   }
 }

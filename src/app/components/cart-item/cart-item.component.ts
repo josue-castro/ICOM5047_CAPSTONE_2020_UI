@@ -8,13 +8,19 @@ import { Cart } from 'src/app/models/Cart';
 })
 export class CartItemComponent implements OnInit {
   @Input() cart: Cart;
-  @Output() cartSelected: EventEmitter<Cart> = new EventEmitter();
+  @Output() cartSelect: EventEmitter<Cart> = new EventEmitter();
+
+  warnTitle: string;
+  expTitle: string;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.warnTitle = `Cart contains ${this.cart.nearExpDateWarnCount} product(s) expiring within a week.`;
+    this.expTitle = `Cart contains ${this.cart.expWarnCount} expired product(s).`;
+  }
 
-  selectCart(cart: Cart) {
-    this.cartSelected.emit(cart);
+  onSelect(cart: Cart) {
+    this.cartSelect.emit(cart);
   }
 }

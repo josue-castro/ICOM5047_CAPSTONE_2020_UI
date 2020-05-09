@@ -1,1 +1,8 @@
-<p>sidebar works!</p>
+<div id="sidebar">
+  <div class="panel">
+    <app-cart-list #cartList></app-cart-list>
+  </div>
+  <div class="panel">
+    <app-product-list [cart]="cartList.selectedCart"></app-product-list>
+  </div>
+</div>
