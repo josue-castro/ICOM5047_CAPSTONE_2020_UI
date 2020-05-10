@@ -1,8 +1,9 @@
-<div class="list-container" *ngIf="cart">
-  <div class="list-toolbar">
-    <mat-toolbar color="primary">
-      Products
-    </mat-toolbar>
+<div class="list-container">
+  <div class="list-search-bar mat-elevation-z1">
+    <app-search-bar
+      inputLabel="Product Search"
+      [searchOptions]="searchOptions"
+    ></app-search-bar>
   </div>
   <div class="list-content">
     <mat-action-list dense>

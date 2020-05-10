@@ -18,9 +18,13 @@ import { ProductService } from '../../services/product.service';
   styleUrls: ['./product-list.component.css'],
 })
 export class ProductListComponent implements OnInit, OnChanges {
-  @Input() cart: number;
+  @Input() cart: Cart;
 
   products: Product[];
+  searchOptions = [
+    { value: 'lotId', viewValue: 'Lot ID' },
+    { value: 'Product Name', viewValue: 'Product Name' },
+  ];
   selectedProduct: Product;
 
   constructor(private productService: ProductService) {}
@@ -32,7 +36,9 @@ export class ProductListComponent implements OnInit, OnChanges {
       let change = changes[propName];
       switch (propName) {
         case 'cart': {
+          console.log(this.cart);
           if (change.currentValue) {
+            console.log(change.currentValue);
             this.productService
               .getProductsByCartId(change.currentValue.id)
               .subscribe((products) => {

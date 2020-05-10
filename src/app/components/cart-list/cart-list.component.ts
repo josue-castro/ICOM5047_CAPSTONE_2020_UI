@@ -20,7 +20,7 @@ export class CartListComponent implements OnInit {
     { value: 'nearExp', viewValue: 'Products Near Expiration' },
   ];
 
-  @Output() selectedCart: Cart;
+  selectedCart: Cart;
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {

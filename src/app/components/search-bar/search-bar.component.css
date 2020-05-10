@@ -4,6 +4,11 @@
   width: 100%;
 }
 
+.search-menu {
+  display: flex;
+  flex-direction: column;
+}
+
 ::ng-deep .mat-menu-panel {
   padding: 0 10px !important;
   width: 100% !important;
