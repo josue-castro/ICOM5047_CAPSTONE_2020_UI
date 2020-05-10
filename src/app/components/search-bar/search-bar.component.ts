@@ -18,7 +18,11 @@ interface SearchForm {
 })
 export class SearchBarComponent implements OnInit {
   // Search input label
-  @Input() label: string = 'Search';
+  @Input() inputLabel: string = 'Search';
+  // Search input label
+  @Input() searchLabel: string = 'Search by';
+  // Search input label
+  @Input() filterLabel: string = 'Filter by';
   // Disable input
   @Input() disabled: boolean = false;
   // Options to be passed to the Search by select group
@@ -27,7 +31,7 @@ export class SearchBarComponent implements OnInit {
   @Input() filterOptions: SelectOption[];
   @Output() search: EventEmitter<SearchForm> = new EventEmitter();
 
-  value = '';
+  value;
   searchBy;
   filterBy;
 

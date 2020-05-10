@@ -4,7 +4,7 @@
     appearance="outline"
     floatLabel="never"
   >
-    <mat-label>{{ label }}</mat-label>
+    <mat-label>{{ inputLabel }}</mat-label>
     <button
       mat-icon-button
       matPrefix
@@ -16,8 +16,9 @@
     </button>
     <input
       matInput
-      [(value)]="value"
+      [(ngModel)]="value"
       [disabled]="disabled"
+      (keyup.enter)="onSearch()"
       [type]="searchBy == 'expDate' ? 'date' : 'text'"
       placeholder="Enter {{ searchBy | viewValue: searchOptions }}"
     />
@@ -32,35 +33,35 @@
       <mat-icon>filter_list</mat-icon>
     </button>
   </mat-form-field>
-
-  <!-- Advance Search Options -->
-  <mat-menu
-    #searchMenu="matMenu"
-    class="menu-wrapper"
-    yPosition="below"
-    xPosition="before"
-  >
-    <div (click)="$event.stopPropagation()" class="search-menu">
-      <!-- Search by Input field -->
-      <mat-form-field appearance="fill">
-        <mat-label>Search by</mat-label>
-        <mat-select [(value)]="searchBy" disableOptionCentering>
-          <mat-option *ngFor="let key of searchOptions" [value]="key.value">
-            {{ key.viewValue }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-divider></mat-divider>
-      <!-- Filter by Input field -->
-      <mat-form-field appearance="fill">
-        <mat-label>Filter by</mat-label>
-        <mat-select [(value)]="filterBy" disableOptionCentering>
-          <mat-option>Any</mat-option>
-          <mat-option *ngFor="let key of filterOptions" [value]="key.value">
-            {{ key.viewValue }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </mat-menu>
 </div>
+
+<!-- Advance Search Options -->
+<mat-menu
+  #searchMenu="matMenu"
+  class="menu-wrapper"
+  yPosition="below"
+  xPosition="before"
+>
+  <div (click)="$event.stopPropagation()" class="search-menu">
+    <!-- Search by Input field -->
+    <mat-form-field appearance="fill">
+      <mat-label>{{ searchLabel }}</mat-label>
+      <mat-select [(value)]="searchBy" disableOptionCentering>
+        <mat-option *ngFor="let key of searchOptions" [value]="key.value">
+          {{ key.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-divider></mat-divider>
+    <!-- Filter by Input field -->
+    <mat-form-field appearance="fill">
+      <mat-label>{{ filterLabel }}</mat-label>
+      <mat-select [(value)]="filterBy" disableOptionCentering>
+        <mat-option>Any</mat-option>
+        <mat-option *ngFor="let key of filterOptions" [value]="key.value">
+          {{ key.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</mat-menu>
