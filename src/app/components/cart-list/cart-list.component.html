@@ -1,9 +1,12 @@
 <div class="list-container">
   <div class="list-search-bar mat-elevation-z1">
     <app-search-bar
-      [label]="'Cart Search'"
+      #srchBar
+      inputLabel="Cart Search"
+      filterLabel="Contains"
       [searchOptions]="searchOptions"
-      (search)="search()"
+      [filterOptions]="filterOptions"
+      (search)="searchCart(srchBar.value, srchBar.searchBy, srchBar.filterBy)"
     ></app-search-bar>
   </div>
   <div class="list-content">

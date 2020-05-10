@@ -15,6 +15,10 @@ export class CartListComponent implements OnInit {
     { value: 'productName', viewValue: 'Product Name' },
     { value: 'expDate', viewValue: 'Expiration Date' },
   ];
+  filterOptions = [
+    { value: 'expired', viewValue: 'Expired Products' },
+    { value: 'nearExp', viewValue: 'Products Near Expiration' },
+  ];
 
   @Output() selectedCart: Cart;
   constructor(private cartService: CartService) {}
@@ -33,7 +37,7 @@ export class CartListComponent implements OnInit {
     }
   }
 
-  search() {
-    console.log('search');
+  searchCart(term: string, searchBy: String, filterBy: String) {
+    console.log(term, searchBy, filterBy);
   }
 }
