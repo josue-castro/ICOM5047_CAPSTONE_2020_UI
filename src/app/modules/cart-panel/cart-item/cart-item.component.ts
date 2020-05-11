@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Cart } from 'src/app/data/models/Cart';
 
 @Component({
-  selector: 'app-cart-item',
+  selector: 'cart-item',
   templateUrl: './cart-item.component.html',
   styleUrls: ['./cart-item.component.css'],
 })

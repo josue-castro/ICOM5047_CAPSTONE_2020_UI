@@ -3,7 +3,7 @@ import { Cart } from 'src/app/data/models/Cart';
 import { CartService } from 'src/app/data/services/cart.service';
 
 @Component({
-  selector: 'app-cart-list',
+  selector: 'cart-list',
   templateUrl: './cart-list.component.html',
   styleUrls: ['./cart-list.component.css'],
 })
@@ -21,6 +21,8 @@ export class CartListComponent implements OnInit {
   ];
 
   selectedCart: Cart;
+
+  showCartDetails: boolean = false;
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
@@ -29,12 +31,8 @@ export class CartListComponent implements OnInit {
     });
   }
 
-  cartSelect(cart: Cart): void {
-    // Issue: Repetitively fetching products even when selectedCart was equal to cart.
-    // Resolved: Only fetch if the selected cart is different to the previous cart
-    if (!this.selectedCart || this.selectedCart !== cart) {
-      this.selectedCart = cart;
-    }
+  onSelect(cart: Cart): void {
+    this.selectedCart = cart;
   }
 
   searchCart(term: string, searchBy: String, filterBy: String) {
