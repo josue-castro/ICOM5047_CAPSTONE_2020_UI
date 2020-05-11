@@ -1,0 +1,20 @@
+<div>
+  <button mat-list-item (click)="onSelect(cart)">
+    <div mat-line>Cart #{{ cart.id }}</div>
+    <div mat-line>Last update: {{ cart.lastUpdate | date: "shortTime" }}</div>
+    <!-- Near Expiration Warning Icon -->
+    <div
+      class="warn-icon"
+      *ngIf="cart.nearExpDateWarnCount"
+      [title]="warnTitle"
+    >
+      <span>{{ cart.nearExpDateWarnCount }}</span>
+      <mat-icon [ngStyle]="{ color: 'orange' }">warning</mat-icon>
+    </div>
+    <!-- Expired Warning Icon -->
+    <div class="warn-icon" *ngIf="cart.expWarnCount" [title]="expTitle">
+      <span>{{ cart.expWarnCount }}</span>
+      <mat-icon color="warn">warning</mat-icon>
+    </div>
+  </button>
+</div>
