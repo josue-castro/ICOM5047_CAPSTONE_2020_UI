@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import * as dateManager from 'src/app/helpers/expiration';
 
 // Models
-import { Cart } from '../../models/Cart';
-import { Product } from '../../models/Product';
+import { Cart } from '../../data/models/Cart';
+import { Product } from '../../data/models/Product';
 
 // Services
-import { CartService } from '../../services/cart.service';
-import { ProductService } from '../../services/product.service';
+import { CartService } from '../../data/services/cart.service';
+import { ProductService } from '../../data/services/product.service';
 
 @Component({
   selector: 'app-cart-manager',
