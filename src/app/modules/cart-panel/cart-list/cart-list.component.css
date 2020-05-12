@@ -2,17 +2,17 @@
   padding-top: 0;
 }
 
-.list-container {
+.container {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.list-search-bar {
+.search-bar {
   padding: 2px;
 }
 
-.list-content {
+content {
   overflow-y: auto;
 }

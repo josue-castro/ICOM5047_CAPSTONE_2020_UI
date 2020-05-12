@@ -9,6 +9,7 @@ import { CartService } from 'src/app/data/services/cart.service';
 })
 export class CartListComponent implements OnInit {
   carts: Cart[];
+
   searchOptions = [
     { value: 'cartId', viewValue: 'Cart ID' },
     { value: 'lotId', viewValue: 'Lot ID' },
@@ -21,8 +22,8 @@ export class CartListComponent implements OnInit {
   ];
 
   selectedCart: Cart;
+  showDetails: boolean = false;
 
-  showCartDetails: boolean = false;
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
@@ -33,6 +34,7 @@ export class CartListComponent implements OnInit {
 
   onSelect(cart: Cart): void {
     this.selectedCart = cart;
+    this.showDetails = true;
   }
 
   searchCart(term: string, searchBy: String, filterBy: String) {

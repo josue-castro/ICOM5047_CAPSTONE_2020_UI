@@ -1,5 +1,5 @@
-<div class="list-container">
-  <div class="list-search-bar mat-elevation-z1">
+<div class="container">
+  <div class="search-bar mat-elevation-z1">
     <app-search-bar
       #srchBar
       inputLabel="Cart Search"
@@ -9,13 +9,15 @@
       (search)="searchCart(srchBar.value, srchBar.searchBy, srchBar.filterBy)"
     ></app-search-bar>
   </div>
-  <div class="list-content">
-    <mat-action-list dense>
-      <app-cart-item
+  <div class="content">
+    <mat-action-list *ngIf="!showDetails" dense>
+      <cart-item
         *ngFor="let cart of carts"
         [cart]="cart"
-        (cartSelect)="cartSelect($event)"
-      ></app-cart-item>
+        (click)="onSelect(cart)"
+      ></cart-item>
     </mat-action-list>
+
+    <cart-details [cart]="selectedCart" [(opened)]="showDetails"></cart-details>
   </div>
 </div>
