@@ -5,22 +5,31 @@
     floatLabel="never"
   >
     <mat-label>Cart Search</mat-label>
-    <button mat-icon-button matPrefix matTooltip="Search">
+    <button
+      mat-icon-button
+      matPrefix
+      matTooltip="Search"
+      [disabled]="disabled"
+      (click)="onSearch()"
+    >
       <mat-icon>search</mat-icon>
     </button>
     <input
       matInput
       formControlName="term"
+      [type]="searchForm.value.searchBy == 'expDate' ? 'date' : 'text'"
       (keyup.enter)="onSearch()"
       placeholder="Enter {{
         searchForm.value.searchBy | viewValue: searchOptions
       }}"
     />
+
     <button
       mat-icon-button
       matSuffix
       [matMenuTriggerFor]="searchMenu"
       matTooltip="Search options"
+      [disabled]="disabled"
     >
       <mat-icon>filter_list</mat-icon>
     </button>

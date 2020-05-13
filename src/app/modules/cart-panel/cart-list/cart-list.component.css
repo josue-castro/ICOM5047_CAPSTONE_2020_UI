@@ -13,6 +13,6 @@
   padding: 2px;
 }
 
-content {
+.content {
   overflow-y: auto;
 }

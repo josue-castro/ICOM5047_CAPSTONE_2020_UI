@@ -1,4 +1,12 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  Output,
+  Input,
+  EventEmitter,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Site } from 'src/app/data/models/Site';
 
@@ -7,7 +15,8 @@ import { Site } from 'src/app/data/models/Site';
   templateUrl: './cart-search.component.html',
   styleUrls: ['./cart-search.component.css'],
 })
-export class CartSearchComponent implements OnInit {
+export class CartSearchComponent implements OnInit, OnChanges {
+  @Input() disabled: boolean = false;
   @Output() search: EventEmitter<any> = new EventEmitter();
 
   searchForm = this.fb.group({
@@ -38,7 +47,17 @@ export class CartSearchComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSearch() {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['disabled']) {
+      if (changes['disabled'].currentValue) {
+        this.searchForm.disable();
+      } else {
+        this.searchForm.enable();
+      }
+    }
+  }
+
+  onSearch(): void {
     this.search.emit(this.searchForm.value);
   }
 }

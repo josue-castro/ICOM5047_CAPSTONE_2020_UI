@@ -1,4 +1,7 @@
-<div *ngIf="cart && opened">
-  {{ cart.id }}
-  <button (click)="close()">x</button>
+<div *ngIf="opened">
+  <button mat-icon-button (click)="close()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span style="font-size: smaller;">Back to carts</span>
+  <h4 style="text-align: center;">Cart Details</h4>
 </div>

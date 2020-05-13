@@ -1,13 +1,6 @@
 <div class="container">
   <div class="search-bar mat-elevation-z1">
-    <app-search-bar
-      #srchBar
-      inputLabel="Cart Search"
-      filterLabel="Contains"
-      [searchOptions]="searchOptions"
-      [filterOptions]="filterOptions"
-      (search)="searchCart(srchBar.value, srchBar.searchBy, srchBar.filterBy)"
-    ></app-search-bar>
+    <cart-search (search)="searchCart($event)"></cart-search>
   </div>
   <div class="content">
     <mat-action-list *ngIf="!showDetails" dense>
@@ -17,7 +10,6 @@
         (click)="onSelect(cart)"
       ></cart-item>
     </mat-action-list>
-
     <cart-details [cart]="selectedCart" [(opened)]="showDetails"></cart-details>
   </div>
 </div>

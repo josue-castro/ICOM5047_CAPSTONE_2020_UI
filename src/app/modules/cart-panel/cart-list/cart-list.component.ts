@@ -9,18 +9,6 @@ import { CartService } from 'src/app/data/services/cart.service';
 })
 export class CartListComponent implements OnInit {
   carts: Cart[];
-
-  searchOptions = [
-    { value: 'cartId', viewValue: 'Cart ID' },
-    { value: 'lotId', viewValue: 'Lot ID' },
-    { value: 'productName', viewValue: 'Product Name' },
-    { value: 'expDate', viewValue: 'Expiration Date' },
-  ];
-  filterOptions = [
-    { value: 'expired', viewValue: 'Expired Products' },
-    { value: 'nearExp', viewValue: 'Products Near Expiration' },
-  ];
-
   selectedCart: Cart;
   showDetails: boolean = false;
 
@@ -37,7 +25,7 @@ export class CartListComponent implements OnInit {
     this.showDetails = true;
   }
 
-  searchCart(term: string, searchBy: String, filterBy: String) {
-    console.log(term, searchBy, filterBy);
+  searchCart(searchForm) {
+    console.log(searchForm);
   }
 }
