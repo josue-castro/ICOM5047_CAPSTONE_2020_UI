@@ -1,0 +1,75 @@
+<div class="search-panel" [formGroup]="searchForm">
+  <mat-form-field
+    style="margin-bottom: -1.25em;"
+    appearance="outline"
+    floatLabel="never"
+  >
+    <mat-label>Cart Search</mat-label>
+    <button mat-icon-button matPrefix matTooltip="Search">
+      <mat-icon>search</mat-icon>
+    </button>
+    <input
+      matInput
+      formControlName="term"
+      (keyup.enter)="onSearch()"
+      placeholder="Enter {{
+        searchForm.value.searchBy | viewValue: searchOptions
+      }}"
+    />
+    <button
+      mat-icon-button
+      matSuffix
+      [matMenuTriggerFor]="searchMenu"
+      matTooltip="Search options"
+    >
+      <mat-icon>filter_list</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <!-- Search Options Menu -->
+  <mat-menu
+    #searchMenu
+    class="menu-wrapper"
+    yPosition="below"
+    xPosition="before"
+  >
+    <div (click)="$event.stopPropagation()" class="search-menu">
+      <!-- Search by input field -->
+      <mat-form-field appearance="fill">
+        <mat-label>Search by</mat-label>
+        <mat-select formControlName="searchBy" disableOptionCentering>
+          <mat-option *ngFor="let key of searchOptions" [value]="key.value">
+            {{ key.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- Containing products input field -->
+      <mat-form-field appearance="fill">
+        <mat-label>Containing</mat-label>
+        <mat-select formControlName="contains" disableOptionCentering>
+          <mat-option>Any</mat-option>
+          <mat-option *ngFor="let key of containsOptions" [value]="key.value">
+            {{ key.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-divider></mat-divider>
+      <!-- Search by physical or virtual location? -->
+      <span>Location: </span>
+      <mat-radio-group formControlName="locType">
+        <mat-radio-button value="physical">Physical</mat-radio-button>
+        <mat-radio-button value="virtual">Virtual</mat-radio-button>
+      </mat-radio-group>
+      <!-- Select Location -->
+      <mat-form-field appearance="fill">
+        <mat-label>Location</mat-label>
+        <mat-select formControlName="site" disableOptionCentering>
+          <mat-option>Any</mat-option>
+          <mat-option *ngFor="let site of sites" [value]="site.id">
+            {{ site.siteName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-menu>
+</div>

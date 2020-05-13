@@ -1,0 +1,22 @@
+.search-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.search-menu {
+  display: flex;
+  /* width: 200px; */
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin: 5px 0 10px 16px;
+}
+
+::ng-deep .mat-menu-panel {
+  padding: 0 10px !important;
+  width: 100% !important;
+  max-width: none !important;
+}
