@@ -1,17 +1,21 @@
 <div class="list-container">
   <div class="list-search-bar mat-elevation-z1">
-    <app-search-bar
-      inputLabel="Product Search"
-      [searchOptions]="searchOptions"
-    ></app-search-bar>
+    <product-search
+      [disabled]="!cart"
+      (search)="searchProduct($event)"
+    ></product-search>
   </div>
   <div class="list-content">
-    <mat-action-list dense>
-      <app-product-item
-        mat-item-list
+    <mat-action-list *ngIf="!showDetails" dense>
+      <product-item
         *ngFor="let product of products"
         [product]="product"
-      ></app-product-item>
+        (click)="onSelect(product)"
+      ></product-item>
     </mat-action-list>
+    <product-details
+      [product]="selectedProduct"
+      [(opened)]="showDetails"
+    ></product-details>
   </div>
 </div>

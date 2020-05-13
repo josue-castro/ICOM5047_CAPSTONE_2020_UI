@@ -1,0 +1,65 @@
+<div class="search-panel" [formGroup]="searchForm">
+  <mat-form-field
+    style="margin-bottom: -1.25em;"
+    appearance="outline"
+    floatLabel="never"
+  >
+    <mat-label>Product Search</mat-label>
+    <button
+      mat-icon-button
+      matPrefix
+      matTooltip="Search"
+      [disabled]="disabled"
+      (click)="onSearch()"
+    >
+      <mat-icon>search</mat-icon>
+    </button>
+    <input
+      matInput
+      formControlName="term"
+      (keyup.enter)="onSearch()"
+      placeholder="Enter {{
+        searchForm.value.searchBy | viewValue: searchOptions
+      }}"
+    />
+    <button
+      mat-icon-button
+      matSuffix
+      [matMenuTriggerFor]="searchMenu"
+      [disabled]="disabled"
+      matTooltip="Search options"
+    >
+      <mat-icon>filter_list</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <!-- Search Options Menu -->
+  <mat-menu
+    #searchMenu
+    class="menu-wrapper"
+    yPosition="below"
+    xPosition="before"
+  >
+    <div (click)="$event.stopPropagation()" class="search-menu">
+      <!-- Search by input field -->
+      <mat-form-field appearance="fill">
+        <mat-label>Search by</mat-label>
+        <mat-select formControlName="searchBy" disableOptionCentering>
+          <mat-option *ngFor="let key of searchOptions" [value]="key.value">
+            {{ key.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- Filter products input field -->
+      <mat-form-field appearance="fill">
+        <mat-label>Filter by</mat-label>
+        <mat-select formControlName="filterBy" disableOptionCentering>
+          <mat-option>Any</mat-option>
+          <mat-option *ngFor="let key of filterOptions" [value]="key.value">
+            {{ key.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-menu>
+</div>

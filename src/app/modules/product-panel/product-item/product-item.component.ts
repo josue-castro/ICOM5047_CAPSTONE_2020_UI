@@ -5,7 +5,7 @@ import * as dateManager from 'src/app/helpers/expiration';
 import { Product } from 'src/app/data/models/Product';
 
 @Component({
-  selector: 'app-product-item',
+  selector: 'product-item[product]',
   templateUrl: './product-item.component.html',
   styleUrls: ['./product-item.component.css'],
 })

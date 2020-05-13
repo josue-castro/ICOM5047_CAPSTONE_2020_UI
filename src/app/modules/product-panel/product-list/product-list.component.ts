@@ -13,7 +13,7 @@ import { Cart } from 'src/app/data/models/Cart';
 import { ProductService } from '../../../data/services/product.service';
 
 @Component({
-  selector: 'app-product-list',
+  selector: 'product-list[cart]',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
@@ -21,32 +21,32 @@ export class ProductListComponent implements OnInit, OnChanges {
   @Input() cart: Cart;
 
   products: Product[];
-  searchOptions = [
-    { value: 'lotId', viewValue: 'Lot ID' },
-    { value: 'Product Name', viewValue: 'Product Name' },
-  ];
   selectedProduct: Product;
+  showDetails: boolean = false;
 
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    for (let propName in changes) {
-      let change = changes[propName];
-      switch (propName) {
-        case 'cart': {
-          console.log(this.cart);
-          if (change.currentValue) {
-            console.log(change.currentValue);
-            this.productService
-              .getProductsByCartId(change.currentValue.id)
-              .subscribe((products) => {
-                this.products = products;
-              });
-          }
-        }
+    if (changes['cart']) {
+      let change = changes['cart'];
+      if (!change.isFirstChange()) {
+        this.productService
+          .getProductsByCartId(change.currentValue.id)
+          .subscribe((products) => {
+            this.products = products;
+          });
       }
     }
+  }
+
+  onSelect(product: Product) {
+    this.selectedProduct = product;
+    this.showDetails = true;
+  }
+
+  searchProduct(searchForm) {
+    console.log(searchForm);
   }
 }
