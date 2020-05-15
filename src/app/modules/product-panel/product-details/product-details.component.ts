@@ -7,11 +7,12 @@ import { Product } from 'src/app/data/models/Product';
   styleUrls: ['./product-details.component.css'],
 })
 export class ProductDetailsComponent implements OnInit {
+  @Input() product: Product;
+
   @Input() opened: boolean = false;
   @Output() openedChange: EventEmitter<boolean> = new EventEmitter();
-  @Output() closed: EventEmitter<boolean> = new EventEmitter();
-
-  @Input() product: Product;
+  @Output('opened') openedStart = new EventEmitter();
+  @Output('closed') closedStart = new EventEmitter();
 
   constructor() {}
 
@@ -20,18 +21,27 @@ export class ProductDetailsComponent implements OnInit {
   toggle() {
     this.opened = !this.opened;
     this.openedChange.emit(this.opened);
-    this.closed.emit(!this.opened);
+
+    if (this.opened) {
+      this.openedStart.emit();
+    } else {
+      this.closedStart.emit();
+    }
   }
 
   open() {
-    this.opened = true;
-    this.openedChange.emit(this.opened);
-    this.closed.emit(!this.opened);
+    if (!this.opened) {
+      this.opened = true;
+      this.openedChange.emit(this.opened);
+      this.openedStart.emit();
+    }
   }
 
   close() {
-    this.opened = false;
-    this.openedChange.emit(this.opened);
-    this.closed.emit(!this.opened);
+    if (this.opened) {
+      this.opened = false;
+      this.openedChange.emit(this.opened);
+      this.closedStart.emit();
+    }
   }
 }
