@@ -29,8 +29,8 @@ export class ProductSearchComponent implements OnInit, OnChanges {
     { value: 'productName', viewValue: 'Product Name' },
   ];
   filterOptions = [
-    { value: 'expiredProd', viewValue: 'Expired Products' },
-    { value: 'nearExpProd', viewValue: 'Products Near Expiration' },
+    { value: 'expired', viewValue: 'Expired Products' },
+    { value: 'nearExpiration', viewValue: 'Products Near Expiration' },
   ];
 
   constructor(private fb: FormBuilder) {}

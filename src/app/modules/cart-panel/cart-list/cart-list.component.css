@@ -16,3 +16,7 @@
 .content {
   overflow-y: auto;
 }
+
+.load-spinner {
+  text-align: center;
+}

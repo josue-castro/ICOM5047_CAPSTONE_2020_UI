@@ -8,24 +8,31 @@ import { CartService } from 'src/app/data/services/cart.service';
   styleUrls: ['./cart-list.component.css'],
 })
 export class CartListComponent implements OnInit {
+  isLoading: boolean;
   carts: Cart[];
   selectedCart: Cart;
-  showDetails: boolean = false;
+  cartDetails: boolean = false;
 
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.cartService.getCarts().subscribe((carts) => {
+      this.isLoading = false;
       this.carts = carts;
     });
   }
 
-  onSelect(cart: Cart): void {
+  selectCart(cart: Cart): void {
     this.selectedCart = cart;
-    this.showDetails = true;
+    this.cartDetails = true;
   }
 
   searchCart(searchForm) {
     console.log(searchForm);
+  }
+
+  open() {
+    console.log('open');
   }
 }

@@ -3,13 +3,19 @@
     <cart-search (search)="searchCart($event)"></cart-search>
   </div>
   <div class="content">
-    <mat-action-list *ngIf="!showDetails" dense>
+    <mat-spinner
+      *ngIf="isLoading"
+      style="margin: 25% auto;"
+      strokeWidth="3"
+      [diameter]="50"
+    ></mat-spinner>
+    <mat-action-list *ngIf="!cartDetails && !isLoading" dense>
       <cart-item
         *ngFor="let cart of carts"
         [cart]="cart"
-        (click)="onSelect(cart)"
+        (click)="selectCart(cart)"
       ></cart-item>
     </mat-action-list>
-    <cart-details [cart]="selectedCart" [(opened)]="showDetails"></cart-details>
+    <cart-details [cart]="selectedCart" [(opened)]="cartDetails"></cart-details>
   </div>
 </div>

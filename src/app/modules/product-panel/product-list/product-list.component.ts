@@ -20,6 +20,7 @@ import { ProductService } from '../../../data/services/product.service';
 export class ProductListComponent implements OnInit, OnChanges {
   @Input() cart: Cart;
 
+  isLoading: boolean;
   products: Product[];
   selectedProduct: Product;
   showDetails: boolean = false;
@@ -31,10 +32,12 @@ export class ProductListComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['cart']) {
       let change = changes['cart'];
-      if (!change.isFirstChange()) {
+      if (!change.firstChange && change.currentValue) {
+        this.isLoading = true;
         this.productService
           .getProductsByCartId(change.currentValue.id)
           .subscribe((products) => {
+            this.isLoading = false;
             this.products = products;
           });
       }
@@ -47,6 +50,10 @@ export class ProductListComponent implements OnInit, OnChanges {
   }
 
   searchProduct(searchForm) {
-    console.log(searchForm);
+    const { term, searchBy, filterBy } = searchForm;
+
+    if (!term && !filterBy) {
+      this.productService.getProductsByCartId;
+    }
   }
 }

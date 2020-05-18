@@ -6,7 +6,13 @@
     ></product-search>
   </div>
   <div class="list-content">
-    <mat-action-list *ngIf="!showDetails" dense>
+    <mat-spinner
+      *ngIf="isLoading"
+      style="margin: 25% auto;"
+      strokeWidth="3"
+      [diameter]="50"
+    ></mat-spinner>
+    <mat-action-list *ngIf="!showDetails && !isLoading" dense>
       <product-item
         *ngFor="let product of products"
         [product]="product"
