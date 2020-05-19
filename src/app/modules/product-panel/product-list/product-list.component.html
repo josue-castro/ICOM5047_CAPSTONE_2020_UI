@@ -2,7 +2,7 @@
   <div class="list-search-bar mat-elevation-z1">
     <product-search
       [disabled]="!cart"
-      (search)="searchProduct($event)"
+      (input)="searchProduct($event)"
     ></product-search>
   </div>
   <div class="list-content">
@@ -14,7 +14,7 @@
     ></mat-spinner>
     <mat-action-list *ngIf="!showDetails && !isLoading" dense>
       <product-item
-        *ngFor="let product of products"
+        *ngFor="let product of filteredProducts"
         [product]="product"
         (click)="onSelect(product)"
       ></product-item>
