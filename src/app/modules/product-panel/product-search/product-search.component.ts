@@ -56,17 +56,17 @@ export class ProductSearchComponent implements OnInit, OnChanges {
 
   // Emit form values upon changes for dynamic in search in
   // product-list using searchProducts
-  formOnChange(): void {
+  formOnChange() {
     this.searchForm.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe((val) => this.formChange.emit(val));
   }
 
-  onSearch(): void {
+  onSearch() {
     this.search.emit(this.searchForm.value);
   }
 
-  resetForm(): void {
+  resetForm() {
     this.searchForm.get('term').reset();
     this.searchForm.get('filterBy').reset();
     this.searchForm.get('searchBy').setValue('lotId');
