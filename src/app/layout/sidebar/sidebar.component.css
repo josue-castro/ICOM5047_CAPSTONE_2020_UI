@@ -1,11 +1,14 @@
 #sidebar {
-  display: block;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   width: 300px;
-  overflow: hidden;
 }
 
-.panel {
-  display: block;
+.top-panel {
+  height: 50%;
+}
+
+.bottom-panel {
   height: 50%;
 }
