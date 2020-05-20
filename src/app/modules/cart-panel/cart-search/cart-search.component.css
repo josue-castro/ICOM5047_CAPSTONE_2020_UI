@@ -14,6 +14,12 @@
   margin: 5px 0 10px 16px;
 }
 
+.menu-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
 ::ng-deep .mat-menu-panel {
   padding: 0 10px !important;
   width: 100% !important;

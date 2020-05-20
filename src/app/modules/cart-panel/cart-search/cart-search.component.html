@@ -5,6 +5,7 @@
     floatLabel="never"
   >
     <mat-label>Cart Search</mat-label>
+    <!-- Search Button -->
     <button
       mat-icon-button
       matPrefix
@@ -23,7 +24,7 @@
         searchForm.value.searchBy | viewValue: searchOptions
       }}"
     />
-
+    <!-- Filter Button -->
     <button
       mat-icon-button
       matSuffix
@@ -37,7 +38,7 @@
 
   <!-- Search Options Menu -->
   <mat-menu
-    #searchMenu
+    #searchMenu="matMenu"
     class="menu-wrapper"
     yPosition="below"
     xPosition="before"
@@ -79,6 +80,14 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+    </div>
+    <div class="menu-buttons">
+      <button mat-flat-button (click)="resetForm(); $event.stopPropagation()">
+        Reset
+      </button>
+      <button mat-flat-button color="primary" (click)="onSearch()">
+        Search
+      </button>
     </div>
   </mat-menu>
 </div>

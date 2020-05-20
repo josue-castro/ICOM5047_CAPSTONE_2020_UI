@@ -9,6 +9,12 @@
   flex-direction: column;
 }
 
+.menu-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
 ::ng-deep .mat-menu-panel {
   padding: 0 10px !important;
   width: 100% !important;

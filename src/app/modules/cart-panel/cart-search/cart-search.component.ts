@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Site } from 'src/app/data/models/Site';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'cart-search',
@@ -18,6 +19,7 @@ import { Site } from 'src/app/data/models/Site';
 export class CartSearchComponent implements OnInit, OnChanges {
   @Input() disabled: boolean = false;
   @Output() search: EventEmitter<any> = new EventEmitter();
+  @Output() formChange: EventEmitter<any> = new EventEmitter();
 
   searchForm = this.fb.group({
     term: [''],
@@ -45,7 +47,9 @@ export class CartSearchComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.onFormChange();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['disabled']) {
@@ -57,7 +61,19 @@ export class CartSearchComponent implements OnInit, OnChanges {
     }
   }
 
+  onFormChange(): void {
+    this.searchForm.valueChanges
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe((val) => this.formChange.emit(this.searchForm.value));
+  }
+
   onSearch(): void {
     this.search.emit(this.searchForm.value);
+  }
+
+  resetForm(): void {
+    this.searchForm.reset();
+    this.searchForm.get('locType').setValue('physical');
+    this.searchForm.get('searchBy').setValue('cartId');
   }
 }

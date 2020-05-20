@@ -61,5 +61,13 @@
         </mat-select>
       </mat-form-field>
     </div>
+    <div class="menu-buttons">
+      <button mat-flat-button (click)="resetForm(); $event.stopPropagation()">
+        Reset
+      </button>
+      <button mat-flat-button color="primary" (click)="onSearch()">
+        Search
+      </button>
+    </div>
   </mat-menu>
 </div>
