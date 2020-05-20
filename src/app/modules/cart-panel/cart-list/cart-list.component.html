@@ -9,13 +9,17 @@
       strokeWidth="3"
       [diameter]="50"
     ></mat-spinner>
-    <mat-action-list *ngIf="!cartDetails && !isLoading" dense>
+    <mat-action-list *ngIf="!showDetails && !isLoading" dense>
       <cart-item
-        *ngFor="let cart of carts"
+        *ngFor="let cart of filteredCarts"
         [cart]="cart"
         (click)="selectCart(cart)"
       ></cart-item>
     </mat-action-list>
-    <cart-details [cart]="selectedCart" [(opened)]="cartDetails"></cart-details>
+    <cart-details
+      [cart]="selectedCart"
+      [(opened)]="showDetails"
+      (closed)="selectedCart = null"
+    ></cart-details>
   </div>
 </div>

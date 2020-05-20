@@ -10,8 +10,9 @@ import { CartService } from 'src/app/data/services/cart.service';
 export class CartListComponent implements OnInit {
   isLoading: boolean;
   carts: Cart[];
+  filteredCarts: Cart[];
   selectedCart: Cart;
-  cartDetails: boolean = false;
+  showDetails: boolean = false;
 
   constructor(private cartService: CartService) {}
 
@@ -20,19 +21,45 @@ export class CartListComponent implements OnInit {
     this.cartService.getCarts().subscribe((carts) => {
       this.isLoading = false;
       this.carts = carts;
+      this.filteredCarts = this.carts;
     });
   }
 
   selectCart(cart: Cart): void {
     this.selectedCart = cart;
-    this.cartDetails = true;
+    this.showDetails = true;
   }
 
-  searchCart(searchForm) {
-    console.log(searchForm);
+  filterCarts(searchForm): void {
+    const { contains } = searchForm;
+    if (contains) {
+      switch (contains) {
+        case 'expiredProd':
+          this.filteredCarts = this.carts.filter(
+            (cart) => cart.expWarnCount > 0
+          );
+          break;
+
+        case 'nearExpProd':
+          this.filteredCarts = this.carts.filter(
+            (cart) => cart.nearExpDateWarnCount > 0
+          );
+          break;
+      }
+    } else {
+      this.filteredCarts = this.carts;
+    }
   }
 
-  open() {
-    console.log('open');
+  searchCart(searchForm): void {
+    const { term, searchBy } = searchForm;
+    this.isLoading = true;
+    this.selectedCart = null;
+    this.showDetails = false;
+    this.cartService.searchCarts(term, searchBy).subscribe((carts) => {
+      this.isLoading = false;
+      this.carts = carts as Cart[];
+      this.filterCarts(searchForm);
+    });
   }
 }
