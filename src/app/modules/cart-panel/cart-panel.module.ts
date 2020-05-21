@@ -9,12 +9,14 @@ import { CartItemComponent } from './cart-item/cart-item.component';
 import { CartListComponent } from './cart-list/cart-list.component';
 import { CartDetailsComponent } from './cart-details/cart-details.component';
 import { CartSearchComponent } from './cart-search/cart-search.component';
+import { CartRegisterComponent } from './cart-register/cart-register.component';
 
 const components = [
   CartItemComponent,
   CartListComponent,
   CartDetailsComponent,
   CartSearchComponent,
+  CartRegisterComponent,
 ];
 
 @NgModule({

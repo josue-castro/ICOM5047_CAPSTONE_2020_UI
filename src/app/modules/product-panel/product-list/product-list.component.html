@@ -1,9 +1,6 @@
-<div class="container">
+<div class="container" *ngIf="cart">
   <div class="search-bar mat-elevation-z1">
-    <product-search
-      [disabled]="!cart"
-      (search)="filterProducts($event)"
-    ></product-search>
+    <product-search (search)="filterProducts($event)"></product-search>
   </div>
   <div class="content">
     <mat-spinner

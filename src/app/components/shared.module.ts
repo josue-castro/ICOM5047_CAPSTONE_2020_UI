@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { MaterialDesignModule } from '../material-design/material-design.module';
 
-import { SearchBarComponent } from './search-bar/search-bar.component';
 import { ViewValuePipe } from '../pipes/view-value.pipe';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
-  declarations: [SearchBarComponent, ViewValuePipe],
+  declarations: [ViewValuePipe, LoginComponent],
   imports: [CommonModule, FormsModule, MaterialDesignModule],
-  exports: [SearchBarComponent],
+  exports: [ViewValuePipe],
 })
 export class SharedModule {}
