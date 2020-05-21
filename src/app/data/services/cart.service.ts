@@ -14,7 +14,7 @@ import { PRODUCTS } from '../mock/mock-data';
   providedIn: 'root',
 })
 export class CartService {
-  private cartsUrl = 'api/carts';
+  private cartsUrl = 'https://localhost:5001/carts';
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -31,45 +31,51 @@ export class CartService {
     );
   }
 
-  getCartById(id: number): Observable<Cart> {
-    const url = `${this.cartsUrl}/${id}`;
+  getCartById(cartId: number): Observable<Cart> {
+    const url = `${this.cartsUrl}/${cartId}`;
     return this.http.get<Cart>(url).pipe(
-      tap((_) => console.log(`fetched cart w/id=${id}`)),
-      catchError(this.handleError<Cart>(`getCartById id =${id}`))
+      tap((_) => console.log(`fetched cart w/id=${cartId}`)),
+      catchError(this.handleError<Cart>(`getCartById id =${cartId}`))
     );
   }
 
-  getCartContainingProductLotId(lotId: string): Observable<Cart[]> {
-    const cartIds = PRODUCTS.filter((product) => product.lotId === lotId).map(
-      (product) => product.cartId
+  getCartContainingProductLotId(lotId: string): Observable<Cart> {
+    const url = `${this.cartsUrl}/lotid/${lotId}`;
+    return this.http.get<Cart>(url).pipe(
+      tap((_) => console.log(`fetched cart containing/lotId=${lotId}`)),
+      catchError(
+        this.handleError<Cart>(`getCartContainingProductLotId lotId=${lotId}`)
+      )
     );
-
-    return this.http
-      .get<Cart[]>(this.cartsUrl)
-      .pipe(map((carts) => carts.filter((cart) => cartIds.includes(cart.id))));
   }
 
   getCartsContainingProductName(productName: string): Observable<Cart[]> {
-    const cartIds = PRODUCTS.filter(
-      (product) => product.productName === productName
-    ).map((product) => product.cartId);
-
-    return this.http
-      .get<Cart[]>(this.cartsUrl)
-      .pipe(map((carts) => carts.filter((cart) => cartIds.includes(cart.id))));
+    const url = `${this.cartsUrl}/productname/${productName}`;
+    return this.http.get<Cart[]>(url).pipe(
+      tap((_) =>
+        console.log(`fetched cart containing/productName=${productName}`)
+      ),
+      catchError(
+        this.handleError<Cart[]>(
+          `getCartsContainingProductName productName=${productName}`
+        )
+      )
+    );
   }
 
   /** POST: add a new cart to the server */
   addCart(cart: Cart): Observable<Cart> {
     return this.http.post<Cart>(this.cartsUrl, cart, this.httpOptions).pipe(
-      tap((newCart: Cart) => console.log(`added product w/ id=${newCart.id}`)),
+      tap((newCart: Cart) =>
+        console.log(`added product w/ id=${newCart.cartId}`)
+      ),
       catchError(this.handleError<Cart>('addTodo'))
     );
   }
 
   /** DELETE: delete the cart from the server */
   deleteCart(cart: Cart | number): Observable<Cart> {
-    const id = typeof cart === 'number' ? cart : cart.id;
+    const id = typeof cart === 'number' ? cart : cart.cartId;
     const url = `${this.cartsUrl}/${id}`;
 
     return this.http.delete<Cart>(url, this.httpOptions).pipe(
@@ -81,7 +87,7 @@ export class CartService {
   /** PUT: update the cart on the server */
   updateCart(cart: Cart): Observable<any> {
     return this.http.put(this.cartsUrl, cart, this.httpOptions).pipe(
-      tap((_) => console.log(`updated hero id=${cart.id}`)),
+      tap((_) => console.log(`updated hero id=${cart.cartId}`)),
       catchError(this.handleError<any>('updateHero'))
     );
   }

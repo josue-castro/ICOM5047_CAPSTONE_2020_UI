@@ -36,13 +36,13 @@ export class CartListComponent implements OnInit {
       switch (contains) {
         case 'expiredProd':
           this.filteredCarts = this.carts.filter(
-            (cart) => cart.expWarnCount > 0
+            (cart) => cart.expiredWarningCount > 0
           );
           break;
 
         case 'nearExpProd':
           this.filteredCarts = this.carts.filter(
-            (cart) => cart.nearExpDateWarnCount > 0
+            (cart) => cart.nearExpirationDateWarningCount > 0
           );
           break;
       }

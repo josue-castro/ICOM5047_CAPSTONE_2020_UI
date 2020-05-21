@@ -26,9 +26,6 @@ import { HeaderComponent } from './layout/header/header.component';
     ProductPanelModule,
     SharedModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
-      dataEncapsulation: false,
-    }),
     FormsModule,
     MaterialDesignModule,
   ],

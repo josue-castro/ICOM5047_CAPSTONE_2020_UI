@@ -77,7 +77,7 @@ export class ProductListComponent implements OnInit, OnChanges {
     };
 
     dialogConfig.data = {
-      cartId: this.cart.id,
+      cartId: this.cart.cartId,
     };
 
     const dialogRef = this.dialog.open(AddProductDialogComponent, dialogConfig);
@@ -95,7 +95,7 @@ export class ProductListComponent implements OnInit, OnChanges {
     };
 
     dialogConfig.data = {
-      cartId: this.cart.id,
+      cartId: this.cart.cartId,
       products: this.products.map((product) => ({
         id: product.id,
         lotId: product.lotId,

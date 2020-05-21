@@ -15,7 +15,7 @@ export class CartItemComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.warnTitle = `Cart contains ${this.cart.nearExpDateWarnCount} product(s) expiring within a week.`;
-    this.expTitle = `Cart contains ${this.cart.expWarnCount} expired product(s).`;
+    this.warnTitle = `Cart contains ${this.cart.nearExpirationDateWarningCount} product(s) expiring within a week.`;
+    this.expTitle = `Cart contains ${this.cart.expiredWarningCount} expired product(s).`;
   }
 }
