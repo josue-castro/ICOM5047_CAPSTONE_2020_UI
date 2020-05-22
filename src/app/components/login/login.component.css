@@ -1,0 +1,12 @@
+.login-card {
+  width: 300px;
+}
+
+.card-content {
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

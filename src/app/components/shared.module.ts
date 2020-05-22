@@ -10,6 +10,6 @@ import { LoginComponent } from './login/login.component';
 @NgModule({
   declarations: [ViewValuePipe, LoginComponent],
   imports: [CommonModule, FormsModule, MaterialDesignModule],
-  exports: [ViewValuePipe],
+  exports: [ViewValuePipe, LoginComponent],
 })
 export class SharedModule {}
