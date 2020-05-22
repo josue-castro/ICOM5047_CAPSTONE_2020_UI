@@ -14,7 +14,6 @@ import { Product } from 'src/app/data/models/Product';
 import { Cart } from 'src/app/data/models/Cart';
 // Services
 import { ProductService } from '../../../data/services/product.service';
-import * as dateManager from 'src/app/helpers/expiration';
 
 @Component({
   selector: 'product-list[cart]',
@@ -26,7 +25,6 @@ export class ProductListComponent implements OnInit, OnChanges {
 
   isLoading: boolean;
   products: Product[];
-  filteredProducts: Product[];
   selectedProduct: Product;
   showDetails: boolean = false;
 
@@ -40,23 +38,23 @@ export class ProductListComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['cart']) {
       let change = changes['cart'];
+      // If cart value changed and is not null, load products in the cart
       if (!change.firstChange && change.currentValue) {
         this.selectedProduct = null;
         this.showDetails = false;
         this.isLoading = true;
+        // Look for products in the cart selected by cartId
         this.productService
-          .getProductsByCartId(change.currentValue.id)
+          .getProductsByCartId(change.currentValue.cartId)
           .subscribe((products) => {
             this.isLoading = false;
             this.products = products;
-            this.filteredProducts = this.products;
           });
       } else if (!change.firstChange && !change.currentValue) {
         // Cart input changed to null
         this.selectedProduct = null;
         this.showDetails = false;
         this.products = [];
-        this.filteredProducts = [];
       }
     }
   }
@@ -94,10 +92,13 @@ export class ProductListComponent implements OnInit, OnChanges {
       left: '0',
     };
 
+    /* When removing prodcuts from a cart pass the cart name so user knows which cart he selected.
+     Pass information necessary to remove a product which is the (productId) and pass the (lotId)
+     so the user knows which products to select */
     dialogConfig.data = {
-      cartId: this.cart.cartId,
+      cartName: this.cart.cartName,
       products: this.products.map((product) => ({
-        id: product.id,
+        id: product.productId,
         lotId: product.lotId,
       })),
     };
@@ -106,7 +107,22 @@ export class ProductListComponent implements OnInit, OnChanges {
       RemoveProductsDialogComponent,
       dialogConfig
     );
-    dialogRef.afterClosed().subscribe((data) => console.log(data));
+    /* When dialog closed verify if data was sent. If data was sent it return an array containing
+    ths productId's that will be remove  */
+    dialogRef.afterClosed().subscribe((data) => {
+      if (data) {
+        // for each product selected delete it from the backend.
+        data.forEach((id) => {
+          this.productService.deleteProduct(id).subscribe(
+            (_) =>
+              // On success remove product the UI
+              (this.products = this.products.filter(
+                (product) => product.productId != id
+              ))
+          );
+        });
+      }
+    });
   }
 
   addProduct(product: Product) {
@@ -115,37 +131,17 @@ export class ProductListComponent implements OnInit, OnChanges {
       console.log(product);
     });
   }
-  // This search executes in the internal array this.products
-  // All searchable parameters are contained within product objects
-  filterProducts(searchForm) {
-    // searchForm is the event emitted by the (search) event in the product-search component
+
+  searchProducts(searchForm) {
     const { term, searchBy, filterBy } = searchForm;
-    let result: Product[];
-
-    // If no term was specified set result to all products
-    if (!term) {
-      console.log('entro');
-      result = this.products;
-    } else {
-      // Search for term in searchBy category
-      result = this.products.filter((product) =>
-        product[searchBy].toLowerCase().startsWith(term.toLowerCase())
-      );
-    }
-
-    // if Filter was specified filter the result array
-    switch (filterBy) {
-      case 'expired':
-        result = result.filter((product) =>
-          dateManager.isExpired(product.expDate)
-        );
-        break;
-      case 'nearExp':
-        result = result.filter((product) =>
-          dateManager.isNearExpiration(product.expDate, 7)
-        );
-        break;
-    }
-    this.filteredProducts = result;
+    this.isLoading = true;
+    this.selectedProduct = null;
+    this.showDetails = false;
+    this.productService
+      .searchProduct(this.cart.cartId, term, searchBy, filterBy)
+      .subscribe((results) => {
+        this.isLoading = false;
+        this.products = results;
+      });
   }
 }

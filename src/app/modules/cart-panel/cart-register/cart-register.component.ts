@@ -24,7 +24,10 @@ export class CartRegisterComponent implements OnInit {
   ngOnInit(): void {
     this.dialogRef.afterClosed().subscribe((data) => {
       if (data) {
-        // this.cartService.addCart(data as Cart);
+        const post = { tagAddress: data };
+        this.cartService
+          .addCart(post as Cart)
+          .subscribe((res) => console.log(res));
       }
     });
   }

@@ -11,7 +11,7 @@
     ></mat-spinner>
     <mat-action-list *ngIf="!showDetails && !isLoading" dense>
       <cart-item
-        *ngFor="let cart of filteredCarts"
+        *ngFor="let cart of carts"
         [cart]="cart"
         (click)="selectCart(cart)"
       ></cart-item>

@@ -17,11 +17,11 @@ export class CartListComponent implements OnInit {
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
+    // Load all carts when components starts
     this.isLoading = true;
     this.cartService.getCarts().subscribe((carts) => {
       this.isLoading = false;
       this.carts = carts;
-      this.filteredCarts = this.carts;
     });
   }
 
@@ -30,36 +30,54 @@ export class CartListComponent implements OnInit {
     this.showDetails = true;
   }
 
-  filterCarts(searchForm): void {
-    const { contains } = searchForm;
-    if (contains) {
-      switch (contains) {
-        case 'expiredProd':
-          this.filteredCarts = this.carts.filter(
-            (cart) => cart.expiredWarningCount > 0
-          );
-          break;
-
-        case 'nearExpProd':
-          this.filteredCarts = this.carts.filter(
-            (cart) => cart.nearExpirationDateWarningCount > 0
-          );
-          break;
-      }
-    } else {
-      this.filteredCarts = this.carts;
-    }
-  }
-
   searchCart(searchForm): void {
-    const { term, searchBy } = searchForm;
+    const { term, searchBy, contains, site } = searchForm;
     this.isLoading = true;
     this.selectedCart = null;
     this.showDetails = false;
     this.cartService.searchCarts(term, searchBy).subscribe((carts) => {
+      /* If carts is of type Cart we get a single object. We need an array to
+      assign it to this.carts
+      */
+      if (carts) {
+        // carts is defined but it can be of type Cart or Cart[]
+        if (!Array.isArray(carts)) {
+          // If carts is of type Cart we make a temporary array so we can assign it later to this.carts
+          let temp: Cart[] = [];
+          temp.push(carts);
+          this.carts = this.filterCarts(temp, contains, site);
+        } else {
+          // carts is of type Cart[], we can filter the array
+          this.carts = this.filterCarts(carts, contains, site);
+        }
+      } else {
+        // carts is undefined
+        this.carts = [];
+      }
       this.isLoading = false;
-      this.carts = carts as Cart[];
-      this.filterCarts(searchForm);
     });
+  }
+
+  filterCarts(carts: Cart[], contains: string, site: string): Cart[] {
+    let result: Cart[] = carts;
+    /* Contains is either nearExpirationDateWarningCount or expiredWarningCount
+      both properties of the Cart model with a value of type number. Filter
+      carts that contain products that expire or are soon to expire.
+    */
+    switch (contains) {
+      case 'expired':
+        result = result.filter((cart) => cart.expiredWarningCount > 0);
+        break;
+
+      case 'nearExpDate':
+        result = result.filter(
+          (cart) => cart.nearExpirationDateWarningCount > 0
+        );
+        break;
+    }
+    if (site) {
+      result = result.filter((cart) => cart.siteName == site);
+    }
+    return result;
   }
 }
