@@ -3,5 +3,30 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
   <span style="font-size: smaller;">Back to carts</span>
-  <h4 style="text-align: center;">Cart Details</h4>
+  <mat-list>
+    <mat-list-item>Cart: {{ cart.cartName }}</mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>Tag address: {{ cart.tagAddress }}</mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>Location: {{ cart.siteName }}</mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item
+      >Last updated: {{ cart.lastUpdated | date: "short" }}</mat-list-item
+    >
+    <mat-divider></mat-divider>
+    <mat-list-item
+      >Expired products: {{ cart.expiredWarningCount }}</mat-list-item
+    >
+    <mat-divider></mat-divider>
+
+    <mat-list-item
+      >Products soon to expire:
+      {{ cart.nearExpirationDateWarningCount }}</mat-list-item
+    >
+    <mat-divider></mat-divider>
+
+    <mat-list-item
+      >Location mismatch: {{ cart.discrepancyExists }}</mat-list-item
+    >
+  </mat-list>
 </div>
