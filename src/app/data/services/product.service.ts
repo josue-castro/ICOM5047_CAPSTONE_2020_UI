@@ -12,7 +12,7 @@ import { Product } from '../models/Product';
   providedIn: 'root',
 })
 export class ProductService {
-  private productsUrl = 'api/products';
+  private productsUrl = 'https://localhost:5001/products';
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -23,7 +23,7 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getProductsByCartId(cartId: number): Observable<Product[]> {
-    const url = `${this.productsUrl}/?cartId=${cartId}`;
+    const url = `${this.productsUrl}/cartid/${cartId}`;
     return this.http.get<Product[]>(url).pipe(
       tap((_) => console.log(`fetched products w/cartId=${cartId}`)),
       catchError(
@@ -32,22 +32,12 @@ export class ProductService {
     );
   }
 
-  getProductByLotId(cartId: number, lotId: string): Observable<Product[]> {
-    const url = `${this.productsUrl}/?lotId=${lotId}&cartId=${cartId}`;
+  getProductById(productId: number): Observable<Product[]> {
+    const url = `${this.productsUrl}/${productId}`;
     return this.http.get<Product[]>(url).pipe(
-      tap((_) => console.log(`fetched product w/lotId=${lotId}`)),
+      tap((_) => console.log(`fetched product w/productId=${productId}`)),
       catchError(
-        this.handleError<Product[]>(`getProductsByLotId lotId=${lotId}`)
-      )
-    );
-  }
-
-  getProductsByName(cartId: number, name: string): Observable<Product[]> {
-    const url = `${this.productsUrl}/?productName=${name}&cartId=${cartId}`;
-    return this.http.get<Product[]>(url).pipe(
-      tap((_) => console.log(`fetched products w/name=${name}`)),
-      catchError(
-        this.handleError<Product[]>(`getProductsByName name=${name}`, [])
+        this.handleError<Product[]>(`getProductsByLotId productId=${productId}`)
       )
     );
   }
@@ -58,15 +48,15 @@ export class ProductService {
       .post<Product>(this.productsUrl, product, this.httpOptions)
       .pipe(
         tap((newProduct: Product) =>
-          console.log(`added product w/ id=${newProduct.id}`)
+          console.log(`added product w/ id=${newProduct.productId}`)
         ),
         catchError(this.handleError<Product>('addTodo'))
       );
   }
 
   /** DELETE: delete the product from the server */
-  deleteCart(product: Product | number): Observable<Product> {
-    const id = typeof product === 'number' ? product : product.id;
+  deleteProduct(product: Product | number): Observable<Product> {
+    const id = typeof product === 'number' ? product : product.productId;
     const url = `${this.productsUrl}/${id}`;
 
     return this.http.delete<Product>(url, this.httpOptions).pipe(
@@ -76,24 +66,10 @@ export class ProductService {
   }
 
   /** PUT: update the product on the server */
-  updateCart(product: Product): Observable<any> {
+  updateProduct(product: Product): Observable<any> {
     return this.http.put(this.productsUrl, product, this.httpOptions).pipe(
-      tap((_) => console.log(`updated hero id=${product.id}`)),
+      tap((_) => console.log(`updated hero id=${product.productId}`)),
       catchError(this.handleError<any>('updateHero'))
-    );
-  }
-
-  productSearch(
-    cartId: number,
-    key: string,
-    term: string
-  ): Observable<Product[]> {
-    const url = `${this.productsUrl}/?cartId=${cartId}&${key}=${term}`;
-    return this.http.get<Product[]>(url).pipe(
-      tap((_) =>
-        console.log(`fetched product w/cartId=${cartId} & ${key}=${term}`)
-      ),
-      catchError(this.handleError<Product[]>(`Product Search`, []))
     );
   }
 
@@ -103,45 +79,52 @@ export class ProductService {
     searchBy: string,
     filterBy: string
   ): Observable<Product[]> {
-    // Products to return
-    let products: Observable<Product[]>;
+    let result: Observable<Product[]>;
 
-    // If no term was specified return all products in cart with id=cartId
+    // If no search term was specified get all products in cart with id=cartId
     if (!term) {
-      products = this.getProductsByCartId(cartId);
+      result = this.getProductsByCartId(cartId);
     } else {
-      // If term was specified then we search for it in the searchBy category
-      switch (searchBy) {
-        case 'lotId':
-          products = this.getProductByLotId(cartId, term);
-          break;
-        case 'productName':
-          products = this.getProductsByName(cartId, term);
-          break;
-      }
+      /* If a term was specified search for the term giving matching the searchBy 
+       paramater. searchBy is the the key in the products object and both values are string 
+       searchBy is either (lotId) or (productName)
+      */
+      result = this.getProductsByCartId(cartId).pipe(
+        map((results) =>
+          results.filter(
+            (products) => products[searchBy].toLowerCase() == term.toLowerCase()
+          )
+        )
+      );
     }
 
+    /* At this point (result) already has a value
+    Filter the product's observable if filteBy was specified 
+    based on products' expiration date 
+    */
     switch (filterBy) {
       case 'expired':
-        products.pipe(
-          map((results) =>
-            results.filter((product) => dateManager.isExpired(product.expDate))
+        result = result.pipe(
+          map((products) =>
+            products.filter((product) =>
+              dateManager.isExpired(product.expirationDate)
+            )
           )
         );
         break;
 
       case 'nearExp':
-        products.pipe(
-          map((results) =>
-            results.filter((product) =>
-              dateManager.isNearExpiration(product.expDate, 7)
+        result = result.pipe(
+          map((products) =>
+            products.filter((product) =>
+              dateManager.isNearExpiration(product.expirationDate, 7)
             )
           )
         );
         break;
     }
 
-    return products;
+    return result;
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
