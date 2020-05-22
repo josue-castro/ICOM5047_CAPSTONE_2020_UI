@@ -5,10 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap, filter } from 'rxjs/operators';
 
 // Model
-import { Cart, CartInfo } from '../models/Cart';
-
-// Mock Data
-import { PRODUCTS } from '../mock/mock-data';
+import { Cart } from '../models/Cart';
 
 @Injectable({
   providedIn: 'root',
@@ -63,6 +60,20 @@ export class CartService {
     );
   }
 
+  getCartsByProductExpirationDate(expirationDate: string): Observable<Cart[]> {
+    const url = `${this.cartsUrl}/expirationdate/${expirationDate}`;
+    return this.http.get<Cart[]>(url).pipe(
+      tap((_) =>
+        console.log(`fetched cart containing/expirationdate=${expirationDate}`)
+      ),
+      catchError(
+        this.handleError<Cart[]>(
+          `getCartsContainingProductName expirationdate=${expirationDate}`
+        )
+      )
+    );
+  }
+
   /** POST: add a new cart to the server */
   addCart(cart: Cart): Observable<Cart> {
     return this.http.post<Cart>(this.cartsUrl, cart, this.httpOptions).pipe(
@@ -92,24 +103,25 @@ export class CartService {
     );
   }
 
-  // getCartsWithExpiredProducts(): Observable<Cart> {
-  //   return this.http.get<Cart>(this.cartsUrl).pipe(
-  //     filter()
-  //   )
-  // }
-
   searchCarts(term: string, searchBy: string): Observable<Cart | Cart[]> {
     if (!term) {
       return this.getCarts();
     } else {
       switch (searchBy) {
-        case 'cartId':
-          return this.getCartById(parseInt(term));
+        case 'cartName':
+          return this.getCarts().pipe(
+            map((results) =>
+              results.filter(
+                (cart) => cart.cartName.toLowerCase() == term.toLowerCase()
+              )
+            )
+          );
         case 'lotId':
           return this.getCartContainingProductLotId(term);
-
         case 'productName':
           return this.getCartsContainingProductName(term);
+        case 'expDate':
+          return this.getCartsByProductExpirationDate(term);
       }
     }
   }
