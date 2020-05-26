@@ -22,14 +22,14 @@ export class CartRegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dialogRef.afterClosed().subscribe((data) => {
-      if (data) {
-        const post = { tagAddress: data };
-        this.cartService
-          .addCart(post as Cart)
-          .subscribe((res) => console.log(res));
-      }
-    });
+    // this.dialogRef.afterClosed().subscribe((data) => {
+    //   if (data) {
+    //     const post = { tagAddress: data };
+    //     this.cartService
+    //       .addCart(post as Cart)
+    //       .subscribe((res) => console.log(res));
+    //   }
+    // });
   }
 
   getErrorMessages() {

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialDesignModule } from '../material-design/material-design.module';
 
@@ -9,7 +9,12 @@ import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [ViewValuePipe, LoginComponent],
-  imports: [CommonModule, FormsModule, MaterialDesignModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MaterialDesignModule,
+    ReactiveFormsModule,
+  ],
   exports: [ViewValuePipe, LoginComponent],
 })
 export class SharedModule {}

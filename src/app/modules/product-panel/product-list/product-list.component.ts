@@ -5,9 +5,13 @@ import {
   Input,
   SimpleChanges,
 } from '@angular/core';
+// Dialogs
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AddProductDialogComponent } from '../dialogs/add-product-dialog/add-product-dialog.component';
 import { RemoveProductsDialogComponent } from '../dialogs/remove-products-dialog/remove-products-dialog.component';
+
+// Snackbar
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // Models
 import { Product } from 'src/app/data/models/Product';
@@ -30,7 +34,8 @@ export class ProductListComponent implements OnInit, OnChanges {
 
   constructor(
     private productService: ProductService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {}
@@ -70,8 +75,10 @@ export class ProductListComponent implements OnInit, OnChanges {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.position = {
-      top: '0',
-      left: '0',
+      top: '',
+      bottom: '',
+      left: '',
+      right: '',
     };
 
     dialogConfig.data = {
@@ -79,7 +86,17 @@ export class ProductListComponent implements OnInit, OnChanges {
     };
 
     const dialogRef = this.dialog.open(AddProductDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe((data) => console.log(data));
+    dialogRef.afterClosed().subscribe((data) => {
+      // When dialog closed check if data was sent
+      if (data) {
+        // Add product to cart
+        const prod = {
+          cartId: this.cart.cartId,
+          lotId: data,
+        };
+        this.addProduct(prod as Product);
+      }
+    });
   }
 
   removeProductDialog() {
@@ -87,16 +104,19 @@ export class ProductListComponent implements OnInit, OnChanges {
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
+    dialogConfig.width = '300px';
     dialogConfig.position = {
-      top: '0',
-      left: '0',
+      top: '',
+      bottom: '',
+      left: '',
+      right: '',
     };
 
     /* When removing prodcuts from a cart pass the cart name so user knows which cart he selected.
      Pass information necessary to remove a product which is the (productId) and pass the (lotId)
      so the user knows which products to select */
     dialogConfig.data = {
-      cartName: this.cart.cartName,
+      cartId: this.cart.cartId,
       products: this.products.map((product) => ({
         id: product.productId,
         lotId: product.lotId,
@@ -113,13 +133,20 @@ export class ProductListComponent implements OnInit, OnChanges {
       if (data) {
         // for each product selected delete it from the backend.
         data.forEach((id) => {
-          this.productService.deleteProduct(id).subscribe(
-            (_) =>
-              // On success remove product the UI
-              (this.products = this.products.filter(
-                (product) => product.productId != id
-              ))
-          );
+          this.productService.deleteProduct(id).subscribe((_) => {
+            // Close details and null selected product if product was deleted
+            if (this.selectedProduct && this.selectedProduct.productId == id) {
+              this.selectedProduct = null;
+              this.showDetails = false;
+            }
+            // On success remove product the UI
+            this.products = this.products.filter(
+              (product) => product.productId != id
+            );
+          });
+        });
+        this._snackBar.open('Products removed from cart', undefined, {
+          duration: 2000,
         });
       }
     });
@@ -128,7 +155,12 @@ export class ProductListComponent implements OnInit, OnChanges {
   addProduct(product: Product) {
     this.productService.addProduct(product).subscribe((product) => {
       // TODO add product to products array
-      console.log(product);
+      if (product) {
+        this.products.push(product);
+        this._snackBar.open('Product added to cart.', undefined, {
+          duration: 2000,
+        });
+      }
     });
   }
 

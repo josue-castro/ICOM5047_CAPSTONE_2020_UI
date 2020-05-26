@@ -1,15 +1,14 @@
 #sidebar {
   display: flex;
   flex-direction: column;
+  width: 300px;
   height: 100%;
-  width: 250px;
 }
 
 .top-panel {
-  min-height: 40%;
+  min-height: 45%;
 }
 
 .bottom-panel {
-  flex: 1;
-  max-height: 60%;
+  max-height: 55%;
 }

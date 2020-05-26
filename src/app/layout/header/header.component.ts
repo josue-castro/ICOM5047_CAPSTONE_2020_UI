@@ -17,9 +17,12 @@ export class HeaderComponent implements OnInit {
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
+    dialogConfig.width = '300px';
     dialogConfig.position = {
-      top: '0',
-      left: '0',
+      top: '',
+      bottom: '',
+      left: '',
+      right: '',
     };
 
     this.dialog.open(CartRegisterComponent, dialogConfig);

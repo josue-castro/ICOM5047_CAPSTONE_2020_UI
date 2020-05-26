@@ -1,12 +1,33 @@
-.login-card {
-  width: 300px;
+.login {
+  height: 100vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  width: auto;
+  background-image: url("../../../assets/images/login.png");
+}
+
+form {
+  display: flex;
+  position: absolute;
+  margin: 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-card {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .card-content {
-}
-
-.actions {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  width: 80%;
+  margin: 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
