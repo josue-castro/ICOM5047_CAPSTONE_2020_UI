@@ -14,13 +14,13 @@ export class AddProductDialogComponent {
     Validators.maxLength(20),
     Validators.pattern('[a-zA-Z0-9-_]+$'),
   ]);
-  cartId: number;
+  cartName: string;
 
   constructor(
     private dialogRef: MatDialogRef<AddProductDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
-    this.cartId = data.cartId;
+    this.cartName = data.cartName;
   }
 
   getErrorMessages() {

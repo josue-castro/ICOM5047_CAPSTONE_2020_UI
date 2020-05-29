@@ -1,5 +1,12 @@
 <div>
   <button mat-list-item>
+    <mat-icon
+      mat-list-icon
+      *ngIf="product.discrepancyExists"
+      title="Location discrepancy"
+      color="warn"
+      >report</mat-icon
+    >
     <div mat-line>Lot ID: {{ product.lotId }}</div>
     <div mat-line>Product Name: {{ product.productName }}</div>
     <mat-icon title="Product is expired" *ngIf="isExpired()" color="warn"

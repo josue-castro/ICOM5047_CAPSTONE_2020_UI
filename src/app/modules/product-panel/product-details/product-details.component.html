@@ -5,21 +5,17 @@
   <span style="font-size: small;">Back to products</span>
   <mat-list>
     <mat-list-item>Lot id: {{ product.lotId }}</mat-list-item>
-    <mat-divider></mat-divider>
     <mat-list-item>Product name: {{ product.productName }}</mat-list-item>
-    <mat-divider></mat-divider>
     <mat-list-item
       >Expiration date:
       {{ product.expirationDate | date: "short" }}</mat-list-item
     >
-    <mat-divider></mat-divider>
     <mat-list-item
       >Virtual location: {{ product.virtualSiteName }}</mat-list-item
     >
-    <mat-divider></mat-divider>
     <mat-list-item
-      >Location mismatch: {{ product.discrepancyExists }}</mat-list-item
+      >Location mismatch:
+      {{ product.discrepancyExists ? "Yes" : "No" }}</mat-list-item
     >
-    <mat-divider></mat-divider>
   </mat-list>
 </div>
