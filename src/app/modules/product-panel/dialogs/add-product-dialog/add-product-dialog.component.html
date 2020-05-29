@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Add Product to Cart: {{ cartName }}</h2>
+<mat-dialog-content>
+  <mat-form-field
+    class="form-field"
+    hintLabel="Lot ID 13 to 20 characters"
+    appearance="standard"
+  >
+    <mat-label>Enter lot id</mat-label>
+    <input matInput #input maxlength="20" [formControl]="lotId" />
+    <button
+      mat-button
+      *ngIf="lotId.value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="lotId.setValue('')"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-error *ngIf="lotId.invalid && (lotId.dirty || lotId.touched)">{{
+      getErrorMessages()
+    }}</mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions class="actions">
+  <button mat-flat-button (click)="close()">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="addProduct()"
+    [disabled]="lotId.invalid"
+  >
+    Add
+  </button>
+</mat-dialog-actions>

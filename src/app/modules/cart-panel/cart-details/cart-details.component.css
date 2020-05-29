@@ -1,0 +1,7 @@
+mat-list-item {
+  font-size: 14px !important;
+}
+
+mat-list-item:nth-child(odd) {
+  background-color: #dddddd;
+}

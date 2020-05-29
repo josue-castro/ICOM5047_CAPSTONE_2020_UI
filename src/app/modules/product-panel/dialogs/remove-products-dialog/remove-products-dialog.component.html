@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Remove Products from Cart: {{ cartName }}</h2>
+<mat-dialog-content>
+  <mat-form-field hintLabel="Select products by lot id">
+    <mat-label>Products</mat-label>
+    <mat-select [formControl]="products" multiple>
+      <mat-option *ngFor="let product of productList" [value]="product.id">{{
+        product.lotId
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions class="actions">
+  <button mat-flat-button (click)="close()">Cancel</button>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="removeProducts()"
+    [disabled]="products.value.length == 0"
+  >
+    Remove
+  </button>
+</mat-dialog-actions>
+<div></div>

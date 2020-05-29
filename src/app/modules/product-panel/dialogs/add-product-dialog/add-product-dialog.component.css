@@ -1,0 +1,8 @@
+.form-field {
+  width: 200px;
+}
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

@@ -1,10 +1,10 @@
 export class Product {
-  id: number;
+  productId: number;
   lotId: string;
   productName: string;
-  virtualSiteName: string;
-  expDate: string;
+  expirationDate: string;
   quantity: number;
-  discrepancy: boolean;
+  virtualSiteName: string;
+  discrepancyExists: boolean;
   cartId: number;
 }

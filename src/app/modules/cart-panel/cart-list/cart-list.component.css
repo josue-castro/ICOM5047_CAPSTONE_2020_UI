@@ -3,10 +3,9 @@
 }
 
 .container {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .search-bar {
@@ -14,9 +13,6 @@
 }
 
 .content {
+  flex: 1;
   overflow-y: auto;
-}
-
-.load-spinner {
-  text-align: center;
 }

@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Register Cart</h2>
+<p>
+  Enter the Decawave tag address. Enter all capitals after xDECA
+</p>
+<mat-dialog-content>
+  <mat-form-field hintLabel="Ex. xDECA01234JT">
+    <input matInput maxlength="17" [formControl]="tagAddress" />
+    <mat-error *ngIf="tagAddress.invalid">{{ getErrorMessages() }}</mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions class="actions">
+  <button mat-flat-button (click)="close()">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="register()"
+    [disabled]="tagAddress.invalid"
+  >
+    Register
+  </button>
+</mat-dialog-actions>

@@ -75,7 +75,7 @@
         <mat-label>Location</mat-label>
         <mat-select formControlName="site" disableOptionCentering>
           <mat-option>Any</mat-option>
-          <mat-option *ngFor="let site of sites" [value]="site.id">
+          <mat-option *ngFor="let site of sites" [value]="site.siteName">
             {{ site.siteName }}
           </mat-option>
         </mat-select>

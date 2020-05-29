@@ -11,13 +11,12 @@ import { Product } from './models/Product';
 })
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
-    const carts = CARTS;
-    const products = PRODUCTS;
-
-    return { carts, products };
+    // const carts = CARTS;
+    // const products = PRODUCTS;
+    // return { carts, products };
+    return {};
   }
-
-  genId<T extends Cart | Product>(myTable: T[]): number {
-    return myTable.length > 0 ? Math.max(...myTable.map((t) => t.id)) + 1 : 11;
-  }
+  // genId<T extends Cart | Product>(myTable: T[]): number {
+  //   return myTable.length > 0 ? Math.max(...myTable.map((t) => t.id)) + 1 : 11;
+  // }
 }

@@ -1,4 +1,5 @@
 <div class="container">
+  <!-- Panel search bar -->
   <div class="search-bar mat-elevation-z1">
     <cart-search (search)="searchCart($event)"></cart-search>
   </div>
@@ -9,13 +10,18 @@
       strokeWidth="3"
       [diameter]="50"
     ></mat-spinner>
-    <mat-action-list *ngIf="!cartDetails && !isLoading" dense>
+    <!-- Cart List -->
+    <mat-action-list *ngIf="!showDetails && !isLoading" dense>
       <cart-item
         *ngFor="let cart of carts"
         [cart]="cart"
         (click)="selectCart(cart)"
       ></cart-item>
     </mat-action-list>
-    <cart-details [cart]="selectedCart" [(opened)]="cartDetails"></cart-details>
+    <cart-details
+      [cart]="selectedCart"
+      [(opened)]="showDetails"
+      (closed)="selectedCart = null"
+    ></cart-details>
   </div>
 </div>

@@ -16,10 +16,10 @@ export class ProductItemComponent implements OnInit {
   ngOnInit(): void {}
 
   isExpired(): boolean {
-    return dateManager.isExpired(this.product.expDate);
+    return dateManager.isExpired(this.product.expirationDate);
   }
 
   isNearExpiration(): boolean {
-    return dateManager.isNearExpiration(this.product.expDate, 7);
+    return dateManager.isNearExpiration(this.product.expirationDate, 7);
   }
 }

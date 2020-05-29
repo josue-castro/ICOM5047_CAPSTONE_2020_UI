@@ -6,10 +6,12 @@ export class CartInfo {
 }
 
 export class Cart {
-  id: number;
+  cartId: number;
+  cartName: string;
   tagAddress: string;
-  lastUpdate: string;
-  nearExpDateWarnCount: number;
-  expWarnCount: number;
-  discrepancy: boolean;
+  lastUpdated: string;
+  siteName: string;
+  discrepancyExists: boolean;
+  nearExpirationDateWarningCount: number;
+  expiredWarningCount: number;
 }

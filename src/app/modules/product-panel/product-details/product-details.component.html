@@ -2,6 +2,20 @@
   <button mat-icon-button (click)="close()">
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <span style="font-size: smaller;">Back to products</span>
-  <h4 style="text-align: center;">Product Details</h4>
+  <span style="font-size: small;">Back to products</span>
+  <mat-list>
+    <mat-list-item>Lot id: {{ product.lotId }}</mat-list-item>
+    <mat-list-item>Product name: {{ product.productName }}</mat-list-item>
+    <mat-list-item
+      >Expiration date:
+      {{ product.expirationDate | date: "short" }}</mat-list-item
+    >
+    <mat-list-item
+      >Virtual location: {{ product.virtualSiteName }}</mat-list-item
+    >
+    <mat-list-item
+      >Location mismatch:
+      {{ product.discrepancyExists ? "Yes" : "No" }}</mat-list-item
+    >
+  </mat-list>
 </div>

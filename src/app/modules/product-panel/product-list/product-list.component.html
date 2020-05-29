@@ -1,11 +1,8 @@
-<div class="list-container">
-  <div class="list-search-bar mat-elevation-z1">
-    <product-search
-      [disabled]="!cart"
-      (input)="searchProduct($event)"
-    ></product-search>
+<div class="container" *ngIf="cart">
+  <div class="search-bar mat-elevation-z1">
+    <product-search (search)="searchProducts($event)"></product-search>
   </div>
-  <div class="list-content">
+  <div class="content">
     <mat-spinner
       *ngIf="isLoading"
       style="margin: 25% auto;"
@@ -14,7 +11,7 @@
     ></mat-spinner>
     <mat-action-list *ngIf="!showDetails && !isLoading" dense>
       <product-item
-        *ngFor="let product of filteredProducts"
+        *ngFor="let product of products"
         [product]="product"
         (click)="onSelect(product)"
       ></product-item>
@@ -22,6 +19,15 @@
     <product-details
       [product]="selectedProduct"
       [(opened)]="showDetails"
+      (closed)="selectedProduct = null"
     ></product-details>
+  </div>
+  <div class="actions">
+    <button mat-flat-button color="primary" (click)="addProductDialog()">
+      Add product
+    </button>
+    <button mat-flat-button color="warn" (click)="removeProductDialog()">
+      Remove
+    </button>
   </div>
 </div>
