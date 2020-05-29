@@ -1,6 +1,13 @@
 <div>
   <button mat-list-item>
-    <div mat-line>Cart: {{ cart.cartId }}</div>
+    <mat-icon
+      mat-list-icon
+      *ngIf="cart.discrepancyExists"
+      title="Location discrepancy"
+      color="warn"
+      >report</mat-icon
+    >
+    <div mat-line>Cart: {{ cart.cartName }}</div>
     <div mat-line>Last update: {{ cart.lastUpdated | date: "shortTime" }}</div>
     <!-- Near Expiration Warning Icon -->
     <div

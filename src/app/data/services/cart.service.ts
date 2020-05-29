@@ -104,15 +104,17 @@ export class CartService {
   }
 
   searchCarts(term: string, searchBy: string): Observable<Cart | Cart[]> {
+    // If no term is specified get a list of all carts
     if (!term) {
       return this.getCarts();
     } else {
+      // If term was specified search according to the searchBy value
       switch (searchBy) {
         case 'cartName':
           return this.getCarts().pipe(
             map((results) =>
-              results.filter(
-                (cart) => cart.cartName.toLowerCase() == term.toLowerCase()
+              results.filter((cart) =>
+                cart.cartName.toLowerCase().startsWith(term.toLowerCase())
               )
             )
           );

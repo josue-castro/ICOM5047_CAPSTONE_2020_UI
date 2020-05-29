@@ -86,7 +86,7 @@ export class ProductService {
       result = this.getProductsByCartId(cartId);
     } else {
       /* If a term was specified search for the term giving matching the searchBy 
-       paramater. searchBy is the the key in the products object and both values are string 
+       paramater. searchBy is a key in the products object and both values are string 
        searchBy is either (lotId) or (productName)
       */
       result = this.getProductsByCartId(cartId).pipe(

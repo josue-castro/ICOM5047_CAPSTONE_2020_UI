@@ -1,6 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Cart } from 'src/app/data/models/Cart';
 
+/**
+ * This components shows the cart's details of the selected cart from the cart-list component
+ * It is to be treated as a panel that can be opened and closed. Emits event it opens and closes
+ * The component is used in cart-list
+ */
 @Component({
   selector: 'cart-details',
   templateUrl: './cart-details.component.html',

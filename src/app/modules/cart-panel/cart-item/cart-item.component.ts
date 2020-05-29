@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Cart } from 'src/app/data/models/Cart';
 
+/**
+ * This component renders
+ */
 @Component({
   selector: 'cart-item[cart]',
   templateUrl: './cart-item.component.html',

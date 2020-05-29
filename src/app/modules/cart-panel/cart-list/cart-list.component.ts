@@ -20,8 +20,8 @@ export class CartListComponent implements OnInit {
     // Load all carts when components starts
     this.isLoading = true;
     this.cartService.getCarts().subscribe((carts) => {
-      this.isLoading = false;
       this.carts = carts;
+      this.isLoading = false;
     });
   }
 
@@ -31,10 +31,14 @@ export class CartListComponent implements OnInit {
   }
 
   searchCart(searchForm): void {
+    // Parameters send in searchForm event. searchForm event is declared in the cart-search component
     const { term, searchBy, contains, site } = searchForm;
+    // when searching reset the cart selected and hide details and cart list
     this.isLoading = true;
     this.selectedCart = null;
     this.showDetails = false;
+    // fetch carts using search criteria
+    // search is split between using the cartService.searchCarts and this.filterCarts()
     this.cartService.searchCarts(term, searchBy).subscribe((carts) => {
       /* If carts is of type Cart we get a single object. We need an array to
       assign it to this.carts
@@ -58,12 +62,14 @@ export class CartListComponent implements OnInit {
     });
   }
 
-  filterCarts(carts: Cart[], contains: string, site: string): Cart[] {
+  /** Filter the cart list based on the parameters specified.
+   * Returns the filtered cart array
+   * @param carts The cart array to filter
+   * @param contains 'expired' to filter by carts containing expired products. 'nearExpDate' to filter by carts containing products near expiration
+   * @param site Location name to filter carts in that location.
+   */
+  private filterCarts(carts: Cart[], contains?: string, site?: string): Cart[] {
     let result: Cart[] = carts;
-    /* Contains is either nearExpirationDateWarningCount or expiredWarningCount
-      both properties of the Cart model with a value of type number. Filter
-      carts that contain products that expire or are soon to expire.
-    */
     switch (contains) {
       case 'expired':
         result = result.filter((cart) => cart.expiredWarningCount > 0);
