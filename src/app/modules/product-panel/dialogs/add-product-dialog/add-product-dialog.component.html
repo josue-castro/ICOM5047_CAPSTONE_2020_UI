@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Add Product to Cart: {{ cartName }}</h2>
+<h2 mat-dialog-title>Add Product to Cart: {{ cart.cartName }}</h2>
 <mat-dialog-content>
   <mat-form-field
     class="form-field"
@@ -6,7 +6,7 @@
     appearance="standard"
   >
     <mat-label>Enter lot id</mat-label>
-    <input matInput #input maxlength="20" [formControl]="LotId" />
+    <input matInput #input maxlength="17" [formControl]="LotId" />
     <button
       mat-button
       *ngIf="LotId.value"

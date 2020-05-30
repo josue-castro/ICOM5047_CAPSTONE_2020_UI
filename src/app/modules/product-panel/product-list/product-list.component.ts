@@ -66,14 +66,14 @@ export class ProductListComponent implements OnInit, OnChanges {
           .subscribe((products) => {
             this.isLoading = false;
             this.products = products;
-            this.productsCopy = this.products;
+            this.productsCopy = products;
           });
       } else if (!change.firstChange && !change.currentValue) {
         // Cart input changed to null
         this.selectedProduct = null;
         this.showDetails = false;
         this.products = [];
-        this.productsCopy = this.products;
+        this.productsCopy = [];
       }
     }
   }
@@ -96,19 +96,25 @@ export class ProductListComponent implements OnInit, OnChanges {
     };
 
     dialogConfig.data = {
-      cartName: this.cart.cartName,
+      cart: this.cart,
     };
 
     const dialogRef = this.dialog.open(AddProductDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe((data) => {
-      // When dialog closed check if data was sent
-      if (data) {
-        // Add product to cart
-        const prod = {
-          cartId: this.cart.cartId,
-          lotId: data,
-        };
-        this.addProduct(prod as Product);
+    dialogRef.afterClosed().subscribe((result) => {
+      // When dialog closed check if data was sent. If data was sent product was added.
+      // Product is added in the AddProductDialogComponent
+      if (result) {
+        // Add product to UI
+        this.products.push(result.product);
+        // Add product to copy array
+        this.productsCopy.push(result.prodcut);
+        // Update UI warning counts and discrepancy by updating cart
+        this.cartChange.emit(result.cart);
+
+        // Notify user
+        this._snackBar.open('Product added to cart.', undefined, {
+          duration: 2000,
+        });
       }
     });
   }
@@ -146,47 +152,6 @@ export class ProductListComponent implements OnInit, OnChanges {
         this.removeProducts(products);
       }
     });
-  }
-
-  private addProduct(product: Product) {
-    this.productService.addProduct(product).subscribe(
-      (prod) => {
-        if (prod) {
-          // If new product has expiration wanring, update cart's expiration warning count
-          if (DateManager.isExpired(prod.expirationDate)) {
-            this.cart.expiredWarningCount++;
-            this.cartChange.emit(this.cart);
-          }
-          // If new product has near expiration warning, update cart's  near expiration warning count
-          if (DateManager.isNearExpiration(prod.expirationDate, 7)) {
-            this.cart.nearExpirationDateWarningCount++;
-            this.cartChange.emit(this.cart);
-          }
-          // If new product has location discrepancy set cart's discrepancy true
-          if (prod.virtualSiteName != this.cart.siteName) {
-            this.cart.discrepancyExists = true;
-            prod.discrepancyExists = true;
-            this.cartChange.emit(this.cart);
-          }
-
-          // Add product to UI
-          this.products.push(prod);
-          this._snackBar.open('Product added to cart.', undefined, {
-            duration: 2000,
-          });
-        }
-      },
-      (err) => {
-        // Get error message
-        if (err instanceof HttpErrorResponse) {
-          if (err.status == 400) {
-            this._snackBar.open(err.error.LotId, undefined, {
-              duration: 2000,
-            });
-          }
-        }
-      }
-    );
   }
 
   private removeProducts(products: Product[]) {
