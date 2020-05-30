@@ -17,7 +17,7 @@ export class AddProductDialogComponent {
     Validators.required,
     Validators.minLength(13),
     Validators.maxLength(17),
-    Validators.pattern('[a-zA-Z0-9-_]+$'),
+    Validators.pattern('[a-zA-Z0-9-_]+'),
   ]);
   cart: Cart;
 
@@ -33,7 +33,7 @@ export class AddProductDialogComponent {
     if (this.LotId.hasError('required')) {
       return 'You must enter a lot id.';
     } else if (this.LotId.hasError('pattern')) {
-      return 'Valid characters are letters, numbers, -, _';
+      return 'Only letters, numbers, hyphens (-) and underscore (_) allowed';
     } else if (this.LotId.hasError('minlength')) {
       return 'Minimum of 13 characters required.';
     } else if (this.LotId.hasError('maxlength')) {

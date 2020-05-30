@@ -23,7 +23,6 @@ import { ProductService } from 'src/app/data/services/product.service';
 
 // Helpers
 import * as DateManager from 'src/app/helpers/expiration';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'product-list[cart]',
@@ -35,18 +34,19 @@ export class ProductListComponent implements OnInit, OnChanges {
   @Output() cartChange: EventEmitter<Cart> = new EventEmitter<Cart>();
 
   isLoading: boolean;
-  // products array that is listed in the UI this array changes when a search is done
+  // products array lists products in the UI. This array changes when a search is done
   products: Product[];
   // Keep a copy of the products in the cart to update discrepancy in UI when removing a product.
   // This array does not change and keeps all the products in this.cart
   productsCopy: Product[];
   selectedProduct: Product;
+  // Control opening and close of the cart-details component
   showDetails: boolean = false;
 
   constructor(
     private productService: ProductService,
     private dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {}
@@ -112,7 +112,7 @@ export class ProductListComponent implements OnInit, OnChanges {
         this.cartChange.emit(result.cart);
 
         // Notify user
-        this._snackBar.open('Product added to cart.', undefined, {
+        this.snackBar.open('Product added to cart.', undefined, {
           duration: 2000,
         });
       }
@@ -200,7 +200,7 @@ export class ProductListComponent implements OnInit, OnChanges {
         );
       });
     });
-    this._snackBar.open('Products removed from cart', undefined, {
+    this.snackBar.open('Products removed from cart', undefined, {
       duration: 2000,
     });
   }
