@@ -1,12 +1,37 @@
 <h2 mat-dialog-title>Register Cart</h2>
-<p>
-  Enter the Decawave tag address. Enter all capitals after xDECA
-</p>
 <mat-dialog-content>
-  <mat-form-field hintLabel="Ex. xDECA01234JT">
-    <input matInput maxlength="17" [formControl]="tagAddress" />
-    <mat-error *ngIf="tagAddress.invalid">{{ getErrorMessages() }}</mat-error>
-  </mat-form-field>
+  <div [formGroup]="cartReg">
+    <p>
+      Enter the Decawave identifier. Enter all capitals after xDECA.
+    </p>
+    <mat-form-field hintLabel="Ex. xDECA01234J0ZJ9T">
+      <mat-label>Decawave Id</mat-label>
+      <input
+        matInput
+        maxlength="17"
+        formControlName="TagAddress"
+        placeholder="Enter Decawave identifier"
+      />
+      <mat-error *ngIf="cartReg.get('TagAddress').invalid">{{
+        tagErrMsg()
+      }}</mat-error>
+    </mat-form-field>
+    <p>
+      Give the cart an unique name for identification purposes.
+    </p>
+    <mat-form-field hintLabel="Ex. md_cart3">
+      <mat-label>Cart Name</mat-label>
+      <input
+        matInput
+        maxlength="16"
+        formControlName="CartName"
+        placeholder="Enter Cart name"
+      />
+      <mat-error *ngIf="cartReg.get('CartName').invalid">
+        {{ nameErrMsg() }}</mat-error
+      >
+    </mat-form-field>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions class="actions">
@@ -15,7 +40,7 @@
     mat-raised-button
     color="primary"
     (click)="register()"
-    [disabled]="tagAddress.invalid"
+    [disabled]="cartReg.invalid"
   >
     Register
   </button>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { catchError, map, tap, filter } from 'rxjs/operators';
 
 // Model
@@ -12,6 +12,8 @@ import { Cart } from '../models/Cart';
 })
 export class CartService {
   private cartsUrl = 'https://localhost:5001/carts';
+  // Watch if a new Cart was created
+  private newCartAdded = new Subject<Cart>();
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -26,6 +28,16 @@ export class CartService {
       tap((_) => console.log('fetched carts')),
       catchError(this.handleError<Cart[]>('getCarts', []))
     );
+  }
+
+  // Push new cart to the new cart added subject
+  sendNewCart(cart: Cart) {
+    this.newCartAdded.next(cart);
+  }
+
+  // Get the new cart when a new cart has ben registered
+  getNewCart(): Observable<Cart> {
+    return this.newCartAdded.asObservable();
   }
 
   getCartById(cartId: number): Observable<Cart> {
@@ -76,12 +88,13 @@ export class CartService {
 
   /** POST: add a new cart to the server */
   addCart(cart: Cart): Observable<Cart> {
-    return this.http.post<Cart>(this.cartsUrl, cart, this.httpOptions).pipe(
-      tap((newCart: Cart) =>
-        console.log(`added product w/ id=${newCart.cartId}`)
-      ),
-      catchError(this.handleError<Cart>('addTodo'))
-    );
+    return this.http
+      .post<Cart>(this.cartsUrl, cart, this.httpOptions)
+      .pipe(
+        tap((newCart: Cart) =>
+          console.log(`added product w/ id=${newCart.cartId}`)
+        )
+      );
   }
 
   /** DELETE: delete the cart from the server */

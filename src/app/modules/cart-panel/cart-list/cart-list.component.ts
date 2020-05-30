@@ -10,7 +10,6 @@ import { CartService } from 'src/app/data/services/cart.service';
 export class CartListComponent implements OnInit {
   isLoading: boolean;
   carts: Cart[];
-  filteredCarts: Cart[];
   selectedCart: Cart;
   showDetails: boolean = false;
 
@@ -22,6 +21,11 @@ export class CartListComponent implements OnInit {
     this.cartService.getCarts().subscribe((carts) => {
       this.carts = carts;
       this.isLoading = false;
+    });
+    // Subscribe to new cart. Carts are added through the cart-register component that will send the
+    // Registered cart using the CartService
+    this.cartService.getNewCart().subscribe((cart) => {
+      this.carts.push(cart);
     });
   }
 

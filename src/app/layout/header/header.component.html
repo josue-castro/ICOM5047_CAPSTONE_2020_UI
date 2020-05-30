@@ -2,8 +2,16 @@
   <mat-toolbar color="primary">
     <span>ICTS</span>
     <span class="fill-space"></span>
-    <button mat-button (click)="registerCart()">
-      Register Cart
+    <button mat-button [matMenuTriggerFor]="menu">
+      <span>Cart Manager</span>
+      <mat-icon>expand_more</mat-icon>
     </button>
   </mat-toolbar>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="registerCart()">
+      <mat-icon>add</mat-icon>
+      <span>Register Cart</span>
+    </button>
+  </mat-menu>
 </div>
