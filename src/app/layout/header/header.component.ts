@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { CartRegisterComponent } from 'src/app/modules/cart-panel/cart-register/cart-register.component';
+import { CartRegisterComponent } from 'src/app/modules/cart-panel/dialogs/cart-register/cart-register.component';
 
 @Component({
   selector: 'app-header',
