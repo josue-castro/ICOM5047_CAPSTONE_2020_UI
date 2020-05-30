@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Product } from 'src/app/data/models/Product';
 
 @Component({
   selector: 'remove-products-dialog',
@@ -9,7 +10,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class RemoveProductsDialogComponent {
   cartName: String;
-  productList: [{ id: number; lotId: string }];
+  productList: Product[];
   products = new FormControl([]);
 
   constructor(
@@ -21,10 +22,11 @@ export class RemoveProductsDialogComponent {
   }
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(undefined);
   }
 
   removeProducts() {
+    // send products product-list component and remove them there to update the UI
     this.dialogRef.close(this.products.value);
   }
 }

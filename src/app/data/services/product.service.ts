@@ -49,8 +49,7 @@ export class ProductService {
       .pipe(
         tap((newProduct: Product) =>
           console.log(`added product w/ id=${newProduct.productId}`)
-        ),
-        catchError(this.handleError<Product>('addTodo'))
+        )
       );
   }
 
@@ -60,8 +59,8 @@ export class ProductService {
     const url = `${this.productsUrl}/${id}`;
 
     return this.http.delete<Product>(url, this.httpOptions).pipe(
-      tap((_) => console.log(`deleted hero id=${id}`)),
-      catchError(this.handleError<Product>('deleteHero'))
+      tap((_) => console.log(`deleted product id=${id}`)),
+      catchError(this.handleError<Product>('delete product'))
     );
   }
 

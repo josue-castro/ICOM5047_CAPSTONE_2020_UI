@@ -8,7 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./add-product-dialog.component.css'],
 })
 export class AddProductDialogComponent {
-  lotId = new FormControl('', [
+  LotId = new FormControl('', [
     Validators.required,
     Validators.minLength(13),
     Validators.maxLength(20),
@@ -24,13 +24,13 @@ export class AddProductDialogComponent {
   }
 
   getErrorMessages() {
-    if (this.lotId.hasError('required')) {
+    if (this.LotId.hasError('required')) {
       return 'You must enter a lot id';
-    } else if (this.lotId.hasError('pattern')) {
+    } else if (this.LotId.hasError('pattern')) {
       return "Valid characters a-z, A-Z, 0-9, '-', '_'";
-    } else if (this.lotId.hasError('minlength')) {
+    } else if (this.LotId.hasError('minlength')) {
       return 'Minimum of 13 characters required';
-    } else if (this.lotId.hasError('maxlength')) {
+    } else if (this.LotId.hasError('maxlength')) {
       return 'Maximum of 20 characters allowed';
     }
   }
@@ -40,6 +40,6 @@ export class AddProductDialogComponent {
   }
 
   addProduct() {
-    this.dialogRef.close(this.lotId.value);
+    this.dialogRef.close(this.LotId.value);
   }
 }

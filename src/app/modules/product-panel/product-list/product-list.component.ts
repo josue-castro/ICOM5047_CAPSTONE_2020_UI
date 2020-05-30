@@ -20,10 +20,10 @@ import { Product } from 'src/app/data/models/Product';
 import { Cart } from 'src/app/data/models/Cart';
 // Services
 import { ProductService } from 'src/app/data/services/product.service';
-import { CartService } from 'src/app/data/services/cart.service';
 
 // Helpers
 import * as DateManager from 'src/app/helpers/expiration';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'product-list[cart]',
@@ -35,13 +35,16 @@ export class ProductListComponent implements OnInit, OnChanges {
   @Output() cartChange: EventEmitter<Cart> = new EventEmitter<Cart>();
 
   isLoading: boolean;
+  // products array that is listed in the UI this array changes when a search is done
   products: Product[];
+  // Keep a copy of the products in the cart to update discrepancy in UI when removing a product.
+  // This array does not change and keeps all the products in this.cart
+  productsCopy: Product[];
   selectedProduct: Product;
   showDetails: boolean = false;
 
   constructor(
     private productService: ProductService,
-    private cartService: CartService,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar
   ) {}
@@ -63,12 +66,14 @@ export class ProductListComponent implements OnInit, OnChanges {
           .subscribe((products) => {
             this.isLoading = false;
             this.products = products;
+            this.productsCopy = this.products;
           });
       } else if (!change.firstChange && !change.currentValue) {
         // Cart input changed to null
         this.selectedProduct = null;
         this.showDetails = false;
         this.products = [];
+        this.productsCopy = this.products;
       }
     }
   }
@@ -127,10 +132,7 @@ export class ProductListComponent implements OnInit, OnChanges {
      so the user knows which products to select */
     dialogConfig.data = {
       cartName: this.cart.cartName,
-      products: this.products.map((product) => ({
-        id: product.productId,
-        lotId: product.lotId,
-      })),
+      products: this.products,
     };
 
     const dialogRef = this.dialog.open(
@@ -139,67 +141,97 @@ export class ProductListComponent implements OnInit, OnChanges {
     );
     /* When dialog closed verify if data was sent. If data was sent it returns an array
     of ids from products to be removed  */
-    dialogRef.afterClosed().subscribe((data) => {
-      if (data) {
-        this.removeProducts(data);
+    dialogRef.afterClosed().subscribe((products) => {
+      if (products) {
+        this.removeProducts(products);
       }
     });
   }
 
   private addProduct(product: Product) {
-    this.productService.addProduct(product).subscribe((prod) => {
-      if (prod) {
-        // If new product has expiration wanring, update cart's expiration warning count
-        if (DateManager.isExpired(prod.expirationDate)) {
-          this.cart.expiredWarningCount++;
-          this.cartChange.emit(this.cart);
-        }
-        // If new product has near expiration warning, update cart's  near expiration warning count
-        if (DateManager.isNearExpiration(prod.expirationDate, 7)) {
-          this.cart.nearExpirationDateWarningCount++;
-          this.cartChange.emit(this.cart);
-        }
-        // If new product has location discrepancy set cart's discrepancy true
-        if (prod.virtualSiteName != this.cart.siteName) {
-          this.cart.discrepancyExists = true;
-          this.cartChange.emit(this.cart);
-        }
+    this.productService.addProduct(product).subscribe(
+      (prod) => {
+        if (prod) {
+          // If new product has expiration wanring, update cart's expiration warning count
+          if (DateManager.isExpired(prod.expirationDate)) {
+            this.cart.expiredWarningCount++;
+            this.cartChange.emit(this.cart);
+          }
+          // If new product has near expiration warning, update cart's  near expiration warning count
+          if (DateManager.isNearExpiration(prod.expirationDate, 7)) {
+            this.cart.nearExpirationDateWarningCount++;
+            this.cartChange.emit(this.cart);
+          }
+          // If new product has location discrepancy set cart's discrepancy true
+          if (prod.virtualSiteName != this.cart.siteName) {
+            this.cart.discrepancyExists = true;
+            prod.discrepancyExists = true;
+            this.cartChange.emit(this.cart);
+          }
 
-        // Add product to UI
-        this.products.push(prod);
-        this._snackBar.open('Product added to cart.', undefined, {
-          duration: 2000,
-        });
+          // Add product to UI
+          this.products.push(prod);
+          this._snackBar.open('Product added to cart.', undefined, {
+            duration: 2000,
+          });
+        }
+      },
+      (err) => {
+        // Get error message
+        if (err instanceof HttpErrorResponse) {
+          if (err.status == 400) {
+            this._snackBar.open(err.error.LotId, undefined, {
+              duration: 2000,
+            });
+          }
+        }
       }
-    });
+    );
   }
 
-  private removeProducts(productIds: number[]) {
-    productIds.forEach((id) => {
-      this.productService.deleteProduct(id).subscribe((_) => {
-        // Close details and null selected product if the selected product was deleted
-        if (this.selectedProduct && this.selectedProduct.productId == id) {
+  private removeProducts(products: Product[]) {
+    products.forEach((product) => {
+      this.productService.deleteProduct(product).subscribe((_) => {
+        // It the product to be deleted is the selectedProduct, hide details and reset selectedProduct
+        if (
+          this.selectedProduct &&
+          this.selectedProduct.productId == product.productId
+        ) {
           this.selectedProduct = null;
           this.showDetails = false;
         }
-        // Get product to be deleted
-        const rmProd: Product = this.products.find(
-          (product) => product.productId == id
-        );
+
         // If the product removed had expiration warning, update cart's warning count
-        if (DateManager.isExpired(rmProd.expirationDate)) {
+        if (DateManager.isExpired(product.expirationDate)) {
           this.cart.expiredWarningCount--;
           this.cartChange.emit(this.cart);
         }
         // If the product removed had near expiration warning, update cart's near expiration warning count
-        if (DateManager.isNearExpiration(rmProd.expirationDate, 7)) {
+        if (DateManager.isNearExpiration(product.expirationDate, 7)) {
           this.cart.nearExpirationDateWarningCount--;
           this.cartChange.emit(this.cart);
         }
 
-        // On success remove product from UI
+        //Remove product from productsCopy that has all cart products
+        this.productsCopy = this.productsCopy.filter(
+          (p) => p.productId != product.productId
+        );
+
+        // If product had discrepancy verify if it was the only causing it
+        // Update cart discrepancy if necessary
+        if (product.discrepancyExists) {
+          // Check discrepancy in the productsCopy array since it has all the cart products
+          if (
+            this.productsCopy.filter((p) => p.discrepancyExists).length == 0
+          ) {
+            this.cart.discrepancyExists = false;
+            this.cartChange.emit(this.cart);
+          }
+        }
+
+        // Remove product from UI this.products
         this.products = this.products.filter(
-          (product) => product.productId != id
+          (p) => p.productId != product.productId
         );
       });
     });
