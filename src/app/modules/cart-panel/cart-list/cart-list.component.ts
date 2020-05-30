@@ -22,9 +22,21 @@ export class CartListComponent implements OnInit {
       this.carts = carts;
       this.isLoading = false;
     });
-    // Watch if new carts are added in the cart-register component
-    this.cartService.getNewCart().subscribe((cart) => {
-      this.carts.push(cart);
+    // Watch for incoming carts and actions to update the UI
+    // Carts and action come from cart-register, delete-cart components
+    this.cartService.getCartAction().subscribe((data) => {
+      switch (data.action) {
+        case 'register':
+          this.carts.push(data.cart);
+          break;
+
+        case 'update':
+          break;
+
+        case 'delete':
+          this.carts = this.carts.filter((c) => c.cartId != data.cart.cartId);
+          break;
+      }
     });
   }
 

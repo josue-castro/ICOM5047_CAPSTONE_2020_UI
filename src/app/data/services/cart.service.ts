@@ -13,10 +13,12 @@ import { Cart } from '../models/Cart';
 export class CartService {
   private cartsUrl = 'https://localhost:5001/carts';
 
-  // Carts are added in the cart-register component  that is in the app header.
-  // To past the new cart to the cart-list component listen to this subject
-  // and subscribe to get the new cart
-  private newCartAdded = new Subject<Cart>();
+  // This subject is to establish communication between components that handle carts and update the UI
+  // Components: cart-list, cart-register, delete-cart, cart-update
+  // This components are spread appart an cant communicate directly, therefore the subject.
+  // The subject posts an object {cart: Cart, action: string}
+  // send the cart object and the action (register, update, delete)
+  private cartAction = new Subject<{ cart: Cart; action: string }>();
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -29,13 +31,18 @@ export class CartService {
   // Subject Methods
 
   // When a new cart is registered send to new cart through the subject
-  sendNewCart(cart: Cart) {
-    this.newCartAdded.next(cart);
+  /**
+   * Send Carts and Actions to update the UI. Actions are register, delete, update
+   * @param cart Cart object
+   * @param action Action to update UI
+   */
+  sendCartAction(cart: Cart, action: string) {
+    this.cartAction.next({ cart: cart, action: action });
   }
 
   // Subscribe to see if a new cart has been added
-  getNewCart(): Observable<Cart> {
-    return this.newCartAdded.asObservable();
+  getCartAction(): Observable<{ cart: Cart; action: String }> {
+    return this.cartAction.asObservable();
   }
 
   // HTTP Methods

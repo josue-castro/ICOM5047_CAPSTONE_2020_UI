@@ -33,6 +33,7 @@ export class DeleteCartComponent {
     }
     if (this.confirm.valid) {
       this.cartService.deleteCart(this.cartToDelete).subscribe((_) => {
+        this, this.cartService.sendCartAction(this.cartToDelete, 'delete');
         this.snackBar.open('Cart deleted', undefined, {
           duration: 2000,
         });

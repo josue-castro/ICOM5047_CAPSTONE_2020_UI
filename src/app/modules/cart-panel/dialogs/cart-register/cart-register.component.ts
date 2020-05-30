@@ -76,7 +76,8 @@ export class CartRegisterComponent implements OnInit {
       this.cartService.addCart(newCart as Cart).subscribe(
         (cart) => {
           // Send the new cart created through the cartService so that the cart-list component can catch it
-          this.cartService.sendNewCart(cart);
+          // action 'register' to update the UI accordingly
+          this.cartService.sendCartAction(cart, 'register');
           this.snackBar.open('Cart registered', undefined, {
             duration: 2000,
           });
