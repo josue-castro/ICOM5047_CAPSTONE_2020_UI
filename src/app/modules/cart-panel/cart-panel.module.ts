@@ -10,6 +10,7 @@ import { CartListComponent } from './cart-list/cart-list.component';
 import { CartDetailsComponent } from './cart-details/cart-details.component';
 import { CartSearchComponent } from './cart-search/cart-search.component';
 import { CartRegisterComponent } from './dialogs/cart-register/cart-register.component';
+import { DeleteCartComponent } from './dialogs/delete-cart/delete-cart.component';
 
 const components = [
   CartItemComponent,
@@ -17,6 +18,7 @@ const components = [
   CartDetailsComponent,
   CartSearchComponent,
   CartRegisterComponent,
+  DeleteCartComponent,
 ];
 
 @NgModule({

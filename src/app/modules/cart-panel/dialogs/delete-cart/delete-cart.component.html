@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>Delete Cart</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Delete Cart</mat-label>
+    <mat-select [(value)]="cartToDelete">
+      <mat-option>None</mat-option>
+      <mat-option *ngFor="let cart of carts" [value]="cart">
+        {{ cart.cartName }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <ng-container *ngIf="cartToDelete">
+    <p>
+      To confirm deletion please type
+      <strong>{{ cartToDelete.cartName }}</strong>
+    </p>
+    <mat-form-field>
+      <mat-label>Confirm</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter Cart Name"
+        [formControl]="confirm"
+      />
+      <mat-error *ngIf="confirm.hasError('required')"
+        >Confirmation required</mat-error
+      >
+      <mat-error *ngIf="confirm.hasError('confirmationError')">{{
+        confirm.errors.confirmationError
+      }}</mat-error>
+    </mat-form-field>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions class="actions">
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="delete()"
+    [disabled]="confirm.invalid"
+  >
+    Delete
+  </button>
+  <button mat-flat-button (click)="close()">Cancel</button>
+</mat-dialog-actions>

@@ -12,7 +12,10 @@ import { Cart } from '../models/Cart';
 })
 export class CartService {
   private cartsUrl = 'https://localhost:5001/carts';
-  // Watch if a new Cart was created
+
+  // Carts are added in the cart-register component  that is in the app header.
+  // To past the new cart to the cart-list component listen to this subject
+  // and subscribe to get the new cart
   private newCartAdded = new Subject<Cart>();
 
   httpOptions = {
@@ -23,21 +26,24 @@ export class CartService {
 
   constructor(private http: HttpClient) {}
 
+  // Subject Methods
+
+  // When a new cart is registered send to new cart through the subject
+  sendNewCart(cart: Cart) {
+    this.newCartAdded.next(cart);
+  }
+
+  // Subscribe to see if a new cart has been added
+  getNewCart(): Observable<Cart> {
+    return this.newCartAdded.asObservable();
+  }
+
+  // HTTP Methods
   getCarts(): Observable<Cart[]> {
     return this.http.get<Cart[]>(this.cartsUrl).pipe(
       tap((_) => console.log('fetched carts')),
       catchError(this.handleError<Cart[]>('getCarts', []))
     );
-  }
-
-  // Push new cart to the new cart added subject
-  sendNewCart(cart: Cart) {
-    this.newCartAdded.next(cart);
-  }
-
-  // Get the new cart when a new cart has ben registered
-  getNewCart(): Observable<Cart> {
-    return this.newCartAdded.asObservable();
   }
 
   getCartById(cartId: number): Observable<Cart> {

@@ -22,8 +22,7 @@ export class CartListComponent implements OnInit {
       this.carts = carts;
       this.isLoading = false;
     });
-    // Subscribe to new cart. Carts are added through the cart-register component that will send the
-    // Registered cart using the CartService
+    // Watch if new carts are added in the cart-register component
     this.cartService.getNewCart().subscribe((cart) => {
       this.carts.push(cart);
     });
