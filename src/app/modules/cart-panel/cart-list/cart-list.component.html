@@ -3,6 +3,12 @@
   <div class="search-bar mat-elevation-z1">
     <cart-search (search)="searchCart($event)"></cart-search>
   </div>
+  <div *ngIf="showDetails">
+    <button mat-icon-button (click)="cartDetails.close()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span style="font-size: small;">Back to carts</span>
+  </div>
   <div class="content">
     <mat-spinner
       *ngIf="isLoading"
@@ -19,6 +25,7 @@
       ></cart-item>
     </mat-action-list>
     <cart-details
+      #cartDetails
       [cart]="selectedCart"
       [(opened)]="showDetails"
       (closed)="selectedCart = null"

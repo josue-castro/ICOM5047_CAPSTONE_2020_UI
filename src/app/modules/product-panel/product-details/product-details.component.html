@@ -1,8 +1,4 @@
-<div *ngIf="opened" on>
-  <button mat-icon-button (click)="close()">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <span style="font-size: small;">Back to products</span>
+<div *ngIf="opened && product">
   <mat-list>
     <mat-list-item>Lot id: {{ product.lotId }}</mat-list-item>
     <mat-list-item>Product name: {{ product.productName }}</mat-list-item>

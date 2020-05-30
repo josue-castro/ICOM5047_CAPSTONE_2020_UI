@@ -1,8 +1,4 @@
 <div *ngIf="opened && cart">
-  <button mat-icon-button (click)="close()">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <span style="font-size: small;">Back to carts</span>
   <mat-list>
     <mat-list-item>Cart: {{ cart.cartName }}</mat-list-item>
     <mat-list-item>Tag address: {{ cart.tagAddress }}</mat-list-item>
