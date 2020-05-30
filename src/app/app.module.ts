@@ -10,9 +10,6 @@ import { CartPanelModule } from './modules/cart-panel/cart-panel.module';
 import { ProductPanelModule } from './modules/product-panel/product-panel.module';
 import { SharedModule } from './components/shared.module';
 
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './data/in-memory-data.service';
-
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 
 import { MaterialDesignModule } from './material-design/material-design.module';
