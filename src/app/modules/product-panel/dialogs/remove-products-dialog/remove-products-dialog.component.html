@@ -1,8 +1,8 @@
-<h2 mat-dialog-title>Remove Products from Cart: {{ cartName }}</h2>
+<h2 mat-dialog-title>Remove Products from Cart: {{ cart.cartName }}</h2>
 <mat-dialog-content>
   <mat-form-field hintLabel="Select products by lot id">
     <mat-label>Products</mat-label>
-    <mat-select [formControl]="products" multiple>
+    <mat-select [formControl]="deleteProducts" multiple>
       <mat-option *ngFor="let product of productList" [value]="product">{{
         product.lotId
       }}</mat-option>
@@ -15,7 +15,7 @@
     mat-raised-button
     color="warn"
     (click)="removeProducts()"
-    [disabled]="products.value.length == 0"
+    [disabled]="deleteProducts.value.length == 0"
   >
     Remove
   </button>

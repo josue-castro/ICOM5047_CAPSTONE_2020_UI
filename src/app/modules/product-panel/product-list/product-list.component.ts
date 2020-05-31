@@ -100,15 +100,14 @@ export class ProductListComponent implements OnInit, OnChanges {
     };
 
     const dialogRef = this.dialog.open(AddProductDialogComponent, dialogConfig);
+    // When dialog closed check if data was sent. If data was sent product a was added.
+    // Product is added in the AddProductDialogComponent
     dialogRef.afterClosed().subscribe((result) => {
-      // When dialog closed check if data was sent. If data was sent product was added.
-      // Product is added in the AddProductDialogComponent
-      console.log(result);
       if (result) {
         // Add product to UI
         this.products.push(result.product);
         // Add product to copy array
-        this.productsCopy.push(result.prodcut);
+        this.productsCopy.push(result.product);
         // Update UI warning counts and discrepancy by updating cart
         this.cartChange.emit(result.cart);
 
@@ -119,6 +118,8 @@ export class ProductListComponent implements OnInit, OnChanges {
       }
     });
   }
+
+  addProduct() {}
 
   removeProductDialog() {
     // Dialog properties
@@ -134,75 +135,39 @@ export class ProductListComponent implements OnInit, OnChanges {
       right: '',
     };
 
-    /* When removing prodcuts from a cart pass the cart name so user knows which cart he selected.
-     Pass information necessary to remove a product which is the (productId) and pass the (lotId)
-     so the user knows which products to select */
+    /* When removing prodcuts from a cart pass the cart to provide and update cart information.
+     Pass list of products to display in dialog */
     dialogConfig.data = {
-      cartName: this.cart.cartName,
-      products: this.products,
+      cart: this.cart,
+      // Pass all products in using productsCopy
+      products: this.productsCopy,
     };
 
     const dialogRef = this.dialog.open(
       RemoveProductsDialogComponent,
       dialogConfig
     );
-    /* When dialog closed verify if data was sent. If data was sent it returns an array
-    of ids from products to be removed  */
-    dialogRef.afterClosed().subscribe((products) => {
-      if (products) {
-        this.removeProducts(products);
-      }
-    });
-  }
-
-  private removeProducts(products: Product[]) {
-    products.forEach((product) => {
-      this.productService.deleteProduct(product).subscribe((_) => {
-        // It the product to be deleted is the selectedProduct, hide details and reset selectedProduct
-        if (
-          this.selectedProduct &&
-          this.selectedProduct.productId == product.productId
-        ) {
-          this.selectedProduct = null;
-          this.showDetails = false;
-        }
-
-        // If the product removed had expiration warning, update cart's warning count
-        if (DateManager.isExpired(product.expirationDate)) {
-          this.cart.expiredWarningCount--;
-          this.cartChange.emit(this.cart);
-        }
-        // If the product removed had near expiration warning, update cart's near expiration warning count
-        if (DateManager.isNearExpiration(product.expirationDate, 7)) {
-          this.cart.nearExpirationDateWarningCount--;
-          this.cartChange.emit(this.cart);
-        }
-
-        //Remove product from productsCopy that has all cart products
+    // When dialog closes if data is return products were deleted
+    // Check results. Results is an object {result.deletedIds, result.cart}
+    // deletedIds is an array of the deleted products and cart the updated cart
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // Remove products from productsCopy
         this.productsCopy = this.productsCopy.filter(
-          (p) => p.productId != product.productId
+          (product) => !result.deletedIds.includes(product.productId)
         );
-
-        // If product had discrepancy verify if it was the only causing it
-        // Update cart discrepancy if necessary
-        if (product.discrepancyExists) {
-          // Check discrepancy in the productsCopy array since it has all the cart products
-          if (
-            this.productsCopy.filter((p) => p.discrepancyExists).length == 0
-          ) {
-            this.cart.discrepancyExists = false;
-            this.cartChange.emit(this.cart);
-          }
-        }
-
-        // Remove product from UI this.products
+        // Remove products from UI
         this.products = this.products.filter(
-          (p) => p.productId != product.productId
+          (product) => !result.deletedIds.includes(product.productId)
         );
-      });
-    });
-    this.snackBar.open('Products removed from cart', undefined, {
-      duration: 2000,
+        // Update cart values in UI
+        this.cartChange.emit(result.cart);
+
+        // Notify User
+        this.snackBar.open('Products removed from cart', undefined, {
+          duration: 2000,
+        });
+      }
     });
   }
 

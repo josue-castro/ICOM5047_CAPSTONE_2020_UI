@@ -44,7 +44,7 @@ export class AddProductDialogComponent {
   }
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(undefined);
   }
 
   addProduct() {
@@ -69,6 +69,7 @@ export class AddProductDialogComponent {
             this.cart.discrepancyExists = true;
             product.discrepancyExists = true;
           }
+          // send new product and updated cart on dialog close so that product-list component can take action
           this.dialogRef.close({ product: product, cart: this.cart });
         },
         (err) => {
