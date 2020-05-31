@@ -29,12 +29,27 @@
       [(opened)]="showDetails"
       (closed)="selectedProduct = null"
     ></product-details>
+    <ng-container *ngIf="products?.length == 0"
+      ><div *ngIf="productsCopy?.length == 0; else elseBlock">
+        <p style="text-align: center; margin-top: 10px;">Cart is empty.</p>
+      </div>
+      <ng-template #elseBlock
+        ><p style="text-align: center; margin-top: 10px;">
+          No product matched search criteria.
+        </p></ng-template
+      >
+    </ng-container>
   </div>
   <div class="actions">
     <button mat-flat-button color="primary" (click)="addProductDialog()">
       Add product
     </button>
-    <button mat-flat-button color="warn" (click)="removeProductDialog()">
+    <button
+      *ngIf="productsCopy.length != 0"
+      mat-flat-button
+      color="warn"
+      (click)="removeProductDialog()"
+    >
       Remove
     </button>
   </div>

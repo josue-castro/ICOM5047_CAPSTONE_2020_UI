@@ -29,7 +29,7 @@ import * as DateManager from 'src/app/helpers/expiration';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
-export class ProductListComponent implements OnInit, OnChanges {
+export class ProductListComponent implements OnInit {
   @Input() cart: Cart;
   @Output() cartChange: EventEmitter<Cart> = new EventEmitter<Cart>();
 
@@ -38,7 +38,7 @@ export class ProductListComponent implements OnInit, OnChanges {
   products: Product[];
   // Keep a copy of the products in the cart to update discrepancy in UI when removing a product.
   // This array does not change and keeps all the products in this.cart
-  productsCopy: Product[];
+  productsCopy: Product[] = [];
   selectedProduct: Product;
   // Control opening and close of the cart-details component
   showDetails: boolean = false;
@@ -49,33 +49,18 @@ export class ProductListComponent implements OnInit, OnChanges {
     private snackBar: MatSnackBar
   ) {}
 
-  ngOnInit(): void {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['cart']) {
-      let change = changes['cart'];
-      // If cart input changed and is not null, load products in the cart
-      if (!change.firstChange && change.currentValue) {
-        // Reset selectedProduct and hide details
-        this.selectedProduct = null;
-        this.showDetails = false;
-        this.isLoading = true;
-        // Look for products in the cart selected by cartId
-        this.productService
-          .getProductsByCartId(change.currentValue.cartId)
-          .subscribe((products) => {
-            this.isLoading = false;
-            this.products = Array.from(products);
-            this.productsCopy = Array.from(products);
-          });
-      } else if (!change.firstChange && !change.currentValue) {
-        // Cart input changed to null
-        this.selectedProduct = null;
-        this.showDetails = false;
-        this.products = [];
-        this.productsCopy = [];
-      }
-    }
+  ngOnInit(): void {
+    this.selectedProduct = null;
+    this.showDetails = false;
+    this.isLoading = true;
+    // Look for products in the cart selected by cartId
+    this.productService
+      .getProductsByCartId(this.cart.cartId)
+      .subscribe((products) => {
+        this.isLoading = false;
+        this.products = Array.from(products);
+        this.productsCopy = Array.from(products);
+      });
   }
 
   onSelect(product: Product) {
@@ -119,8 +104,6 @@ export class ProductListComponent implements OnInit, OnChanges {
     });
   }
 
-  addProduct() {}
-
   removeProductDialog() {
     // Dialog properties
     const dialogConfig = new MatDialogConfig();
@@ -135,11 +118,11 @@ export class ProductListComponent implements OnInit, OnChanges {
       right: '',
     };
 
-    /* When removing prodcuts from a cart pass the cart to provide and update cart information.
+    /* When removing prodcuts from a cart pass the cart to update cart information.
      Pass list of products to display in dialog */
     dialogConfig.data = {
       cart: this.cart,
-      // Pass all products in using productsCopy
+      // Pass all products using productsCopy
       products: this.productsCopy,
     };
 
@@ -147,9 +130,9 @@ export class ProductListComponent implements OnInit, OnChanges {
       RemoveProductsDialogComponent,
       dialogConfig
     );
-    // When dialog closes if data is return products were deleted
+    // When dialog closes if data is return products were deleted.
     // Check results. Results is an object {result.deletedIds, result.cart}
-    // deletedIds is an array of the deleted products and cart the updated cart
+    // deletedIds is an array of the ids of deleted products and cart the updated cart
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Remove products from productsCopy
