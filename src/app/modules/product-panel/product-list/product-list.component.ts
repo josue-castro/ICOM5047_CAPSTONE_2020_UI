@@ -65,8 +65,8 @@ export class ProductListComponent implements OnInit, OnChanges {
           .getProductsByCartId(change.currentValue.cartId)
           .subscribe((products) => {
             this.isLoading = false;
-            this.products = products;
-            this.productsCopy = products;
+            this.products = Array.from(products);
+            this.productsCopy = Array.from(products);
           });
       } else if (!change.firstChange && !change.currentValue) {
         // Cart input changed to null
@@ -103,6 +103,7 @@ export class ProductListComponent implements OnInit, OnChanges {
     dialogRef.afterClosed().subscribe((result) => {
       // When dialog closed check if data was sent. If data was sent product was added.
       // Product is added in the AddProductDialogComponent
+      console.log(result);
       if (result) {
         // Add product to UI
         this.products.push(result.product);
