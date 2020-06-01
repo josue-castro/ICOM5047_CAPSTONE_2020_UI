@@ -30,7 +30,8 @@ export class CartService {
 
   // Subject Methods
 
-  // When a new cart is registered send to new cart through the subject
+  // When a cart has been registered, updated or deleted it is done at the header
+  // Send the cart and action to update the UI in cart-list component
   /**
    * Send Carts and Actions to update the UI. Actions are register, delete, update
    * @param cart Cart object
@@ -40,7 +41,7 @@ export class CartService {
     this.cartAction.next({ cart: cart, action: action });
   }
 
-  // Subscribe to see if a new cart has been added
+  // Subscribe to see if a carts have been send to perform action in UI
   getCartAction(): Observable<{ cart: Cart; action: String }> {
     return this.cartAction.asObservable();
   }
@@ -105,7 +106,7 @@ export class CartService {
       .post<Cart>(this.cartsUrl, cart, this.httpOptions)
       .pipe(
         tap((newCart: Cart) =>
-          console.log(`added product w/ id=${newCart.cartId}`)
+          console.log(`added cart w/ id=${newCart.cartId}`)
         )
       );
   }
@@ -116,7 +117,7 @@ export class CartService {
     const url = `${this.cartsUrl}/${id}`;
 
     return this.http.delete<Cart>(url, this.httpOptions).pipe(
-      tap((_) => console.log(`deleted hero id=${id}`)),
+      tap((_) => console.log(`deleted cart id=${id}`)),
       catchError(this.handleError<Cart>('deleteHero'))
     );
   }
@@ -124,8 +125,8 @@ export class CartService {
   /** PUT: update the cart on the server */
   updateCart(cart: Cart): Observable<any> {
     return this.http.put(this.cartsUrl, cart, this.httpOptions).pipe(
-      tap((_) => console.log(`updated hero id=${cart.cartId}`)),
-      catchError(this.handleError<any>('updateHero'))
+      tap((_) => console.log(`updated cart id=${cart.cartId}`)),
+      catchError(this.handleError<any>('updateCart'))
     );
   }
 

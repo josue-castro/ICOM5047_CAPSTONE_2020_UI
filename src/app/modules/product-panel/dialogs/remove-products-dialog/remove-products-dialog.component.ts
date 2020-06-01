@@ -31,9 +31,7 @@ export class RemoveProductsDialogComponent {
   }
 
   removeProducts() {
-    // send products product-list component and remove them there to update the UI
-    // this.dialogRef.close(this.products.value);
-    const deleteCalls = [];
+    const deleteCalls = []; // Get all delete calls to perform them at once
     this.deleteProducts.value.forEach((product) => {
       // If the product to be removed had expiration warning, update cart's warning count
       if (DateManager.isExpired(product.expirationDate)) {
@@ -43,13 +41,18 @@ export class RemoveProductsDialogComponent {
       if (DateManager.isNearExpiration(product.expirationDate, 7)) {
         this.cart.nearExpirationDateWarningCount--;
       }
+      // Add delete call
       deleteCalls.push(this.productService.deleteProduct(product));
     });
+    // Fork join to call all delete methods at once
     forkJoin(deleteCalls).subscribe(() => {
+      // All delete call where perform without error.
+
       // Get Ids of deleted products to return when dialog close
       const deletedIds = this.deleteProducts.value.map((p) => p.productId);
-      //Check if there is still discrepancy in cart by checking the remaining products
-      // If no products with discrepancy set cart discrepancy to false
+      //Check if there is still discrepancy in cart by checking the remaining products.
+      //If no products with discrepancy set cart discrepancy to false.
+      // productList original products in cart. Exclude deleted products and check discrepancy
       if (
         this.productList.filter(
           (p) => !deletedIds.includes(p.productId) && p.discrepancyExists
@@ -57,6 +60,7 @@ export class RemoveProductsDialogComponent {
       ) {
         this.cart.discrepancyExists = false;
       }
+      //Send deletedIds and updated Cart to update UI
       this.dialogRef.close({ deletedIds, cart: this.cart });
     });
   }

@@ -21,9 +21,10 @@ import { Cart } from 'src/app/data/models/Cart';
 // Services
 import { ProductService } from 'src/app/data/services/product.service';
 
-// Helpers
-import * as DateManager from 'src/app/helpers/expiration';
-
+/**
+ * This component shows the list of prodcuts, updates the UI when products
+ * are added or removed. Update the cart information and performs search on products
+ */
 @Component({
   selector: 'product-list[cart]',
   templateUrl: './product-list.component.html',

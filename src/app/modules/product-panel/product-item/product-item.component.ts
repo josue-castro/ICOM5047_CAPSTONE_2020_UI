@@ -4,6 +4,8 @@ import * as dateManager from 'src/app/helpers/expiration';
 // Model
 import { Product } from 'src/app/data/models/Product';
 
+//Component use to render product items in the product-list component
+
 @Component({
   selector: 'product-item[product]',
   templateUrl: './product-item.component.html',

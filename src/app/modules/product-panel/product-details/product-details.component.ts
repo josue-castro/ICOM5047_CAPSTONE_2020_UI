@@ -1,6 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Product } from 'src/app/data/models/Product';
 
+/*
+ * This components shows the product's details of the selected product from the ptoduct-list component
+ * It is to be treated as a panel that can be opened and closed. Emits event when opens and closes
+ * The component is used in product-list
+ */
 @Component({
   selector: 'product-details',
   templateUrl: './product-details.component.html',

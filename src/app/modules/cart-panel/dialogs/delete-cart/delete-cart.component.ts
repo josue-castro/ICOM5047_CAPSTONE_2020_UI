@@ -5,6 +5,7 @@ import { Cart } from 'src/app/data/models/Cart';
 import { CartService } from 'src/app/data/services/cart.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+// Dialog component to handle cart deletion
 @Component({
   selector: 'delete-cart',
   templateUrl: './delete-cart.component.html',
@@ -29,6 +30,7 @@ export class DeleteCartComponent {
   }
   delete() {
     if (this.confirm.value != this.cartToDelete.cartName) {
+      // Check that confirmation value matches the cart to be deleted
       this.confirm.setErrors({ confirmationError: 'Cart name does not match' });
     }
     if (this.confirm.valid) {

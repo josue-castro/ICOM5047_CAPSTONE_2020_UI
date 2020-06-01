@@ -1,7 +1,10 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Cart } from 'src/app/data/models/Cart';
 import { CartService } from 'src/app/data/services/cart.service';
-
+/**
+ * This component shows the list of carts, updates the UI when cart is
+ * registered, deleted, or updated. Handles cart searches.
+ */
 @Component({
   selector: 'cart-list',
   templateUrl: './cart-list.component.html',

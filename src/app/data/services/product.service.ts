@@ -22,6 +22,7 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
+  // HTTP METHODS
   getProductsByCartId(cartId: number): Observable<Product[]> {
     const url = `${this.productsUrl}/cartid/${cartId}`;
     return this.http.get<Product[]>(url).pipe(
@@ -72,6 +73,13 @@ export class ProductService {
     );
   }
 
+  /**
+   * Perform an advance search using multiple parameteres to get products
+   * @param cartId Id of cart where products belong to.
+   * @param term Search keyword
+   * @param searchBy Search by criteria, either 'lotId' or 'productName'
+   * @param filterBy Filter producs based on expiration state 'expired' or 'nearExp'
+   */
   searchProduct(
     cartId: number,
     term: string,
@@ -84,7 +92,7 @@ export class ProductService {
     if (!term) {
       result = this.getProductsByCartId(cartId);
     } else {
-      /* If a term was specified search for the term giving matching the searchBy 
+      /* If a term was specified search for the term matching the searchBy 
        paramater. searchBy is a key in the products object and both values are string 
        searchBy is either (lotId) or (productName)
       */

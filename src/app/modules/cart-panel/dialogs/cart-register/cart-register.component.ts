@@ -6,6 +6,7 @@ import { CartService } from 'src/app/data/services/cart.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+// Dialog component to handle cart registrations
 @Component({
   selector: 'cart-register',
   templateUrl: './cart-register.component.html',
@@ -69,6 +70,7 @@ export class CartRegisterComponent implements OnInit {
 
   register() {
     if (this.cartReg.valid) {
+      // If the form is valid create the new cart to be added
       const newCart = {
         cartName: this.cartReg.get('CartName').value,
         tagAddress: this.cartReg.get('TagAddress').value,
@@ -91,7 +93,7 @@ export class CartRegisterComponent implements OnInit {
               Object.keys(validationErrors).forEach((prop) => {
                 // Try to match error messages to form controllers
                 const formControl = this.cartReg.get(prop);
-                // If error matched a controller
+                // If error matched a controller set the error message
                 if (formControl) {
                   formControl.setErrors({
                     serverError: validationErrors[prop],
