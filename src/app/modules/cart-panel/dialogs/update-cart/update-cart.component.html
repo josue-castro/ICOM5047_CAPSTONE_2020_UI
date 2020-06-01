@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>Update Cart</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Update Cart</mat-label>
+    <mat-select [(value)]="cartToUpdate">
+      <mat-option>None</mat-option>
+      <mat-option *ngFor="let cart of carts" [value]="cart">
+        {{ cart.cartName }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <ng-container *ngIf="cartToUpdate">
+    <div [formGroup]="cartUpd">
+      <p>
+        Current Decawave id <strong>{{ cartToUpdate.tagAddress }}</strong>
+      </p>
+      <mat-form-field hintLabel="Ex. xDECA01234J0ZJ9T">
+        <mat-label>New Decawave id</mat-label>
+        <input
+          matInput
+          maxlength="17"
+          formControlName="TagAddress"
+          placeholder="Enter Decawave identifier"
+          [ngModel]="cartToUpdate.tagAddress"
+        />
+        <mat-error *ngIf="cartUpd.get('TagAddress').invalid">{{
+          tagErrMsg()
+        }}</mat-error>
+      </mat-form-field>
+      <p>
+        Current cart name <strong>{{ cartToUpdate.cartName }}</strong>
+      </p>
+      <mat-form-field hintLabel="Ex. md_cart3">
+        <mat-label>New Cart Name</mat-label>
+        <input
+          matInput
+          maxlength="16"
+          formControlName="CartName"
+          placeholder="Enter cart name"
+          [ngModel]="cartToUpdate.cartName"
+        />
+        <mat-error *ngIf="cartUpd.get('CartName').invalid">
+          {{ nameErrMsg() }}</mat-error
+        >
+      </mat-form-field>
+    </div>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions class="actions">
+  <button mat-flat-button (click)="close()">Cancel</button>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="update()"
+    [disabled]="cartUpd.invalid"
+  >
+    Update
+  </button>
+</mat-dialog-actions>

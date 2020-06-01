@@ -1,0 +1,8 @@
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+p {
+  margin: 0;
+}

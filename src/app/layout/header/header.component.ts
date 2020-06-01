@@ -7,6 +7,7 @@ import {
 import { CartRegisterComponent } from 'src/app/modules/cart-panel/dialogs/cart-register/cart-register.component';
 import { CartService } from 'src/app/data/services/cart.service';
 import { DeleteCartComponent } from 'src/app/modules/cart-panel/dialogs/delete-cart/delete-cart.component';
+import { UpdateCartComponent } from 'src/app/modules/cart-panel/dialogs/update-cart/update-cart.component';
 
 @Component({
   selector: 'app-header',
@@ -49,7 +50,24 @@ export class HeaderComponent implements OnInit {
       dialogConfig.data = { carts: carts };
       dialogRef = this.dialog.open(DeleteCartComponent, dialogConfig);
     });
+  }
 
-    // dialogRef.afterClosed()
+  updateCart() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '350px';
+    dialogConfig.position = {
+      top: '',
+      bottom: '',
+      left: '',
+      right: '',
+    };
+
+    let dialogRef: MatDialogRef<any>;
+    this.cartService.getCarts().subscribe((carts) => {
+      dialogConfig.data = { carts: carts };
+      dialogRef = this.dialog.open(UpdateCartComponent, dialogConfig);
+    });
   }
 }
