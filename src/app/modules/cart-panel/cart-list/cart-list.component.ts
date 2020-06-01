@@ -34,9 +34,23 @@ export class CartListComponent implements OnInit {
           break;
 
         case 'update':
+          this.carts.forEach((cart, index) => {
+            if (cart.cartId == data.cart.cartId) {
+              this.carts[index] = data.cart;
+            }
+          });
+          // If cart to update is the cart selected update selectedCart
+          if (this.selectedCart.cartId == data.cart.cartId) {
+            this.selectedCart = data.cart;
+          }
           break;
 
         case 'delete':
+          // If the cart to delete is the selected cart. Hide details and null selected cart
+          if (this.selectedCart.cartId == data.cart.cartId) {
+            this.showDetails = false;
+            this.selectedCart = null;
+          }
           this.carts = this.carts.filter((c) => c.cartId != data.cart.cartId);
           break;
       }

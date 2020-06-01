@@ -124,10 +124,11 @@ export class CartService {
 
   /** PUT: update the cart on the server */
   updateCart(cart: Cart): Observable<any> {
-    return this.http.put(this.cartsUrl, cart, this.httpOptions).pipe(
-      tap((_) => console.log(`updated cart id=${cart.cartId}`)),
-      catchError(this.handleError<any>('updateCart'))
-    );
+    const url = `${this.cartsUrl}/${cart.cartId}`;
+    console.log(url);
+    return this.http
+      .put(url, cart, this.httpOptions)
+      .pipe(tap((_) => console.log(`updated cart id=${cart.cartId}`)));
   }
 
   searchCarts(term: string, searchBy: string): Observable<Cart | Cart[]> {
