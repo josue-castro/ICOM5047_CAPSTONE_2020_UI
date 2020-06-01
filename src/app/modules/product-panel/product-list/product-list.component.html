@@ -40,7 +40,7 @@
       >
     </ng-container>
   </div>
-  <div class="actions">
+  <div *ngIf="!showDetails" class="actions">
     <button mat-flat-button color="primary" (click)="addProductDialog()">
       Add product
     </button>

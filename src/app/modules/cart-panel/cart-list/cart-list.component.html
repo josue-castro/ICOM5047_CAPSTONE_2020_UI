@@ -31,4 +31,9 @@
       (closed)="selectedCart = null"
     ></cart-details>
   </div>
+  <div *ngIf="showDetails" class="actions">
+    <button mat-flat-button color="primary">
+      Cart Trajectory
+    </button>
+  </div>
 </div>
